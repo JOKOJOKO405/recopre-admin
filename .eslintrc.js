@@ -11,5 +11,23 @@ module.exports = {
   ],
   plugins: [],
   // add your custom rules here
-  rules: {},
+  rules: {
+    'no-console': 'off',
+    'vue-max-attributes-per-line': 'off',
+    'dot-notation': 'off',
+    '@typescript-eslint/ban-ts-ignore': 'off',
+    'vue/html-self-closing': [
+      'error',
+      {
+        html:{
+          void: 'always'
+        }
+      }
+    ],
+    'vue/singleline-html-element-content-newline': [
+      'error', {
+        ignores: ['div', 'pre', 'textarea', ...INLINE_ELEMENTS]
+      }
+    ]
+  },
 }
