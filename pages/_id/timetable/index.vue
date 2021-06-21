@@ -1,25 +1,47 @@
 <template>
-  <v-simple-table fixed-header>
-    <thead class="text-center">
-      <tr>
-        <th v-for="(head, index) in tableHead" :key="index" class="text-center">
-          {{ head }}
-        </th>
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      <tr v-for="(timeTable, index) in timeTables" :key="timeTable.id">
-        <td>{{ timeTable.day }}</td>
-        <td v-for="subject in timeTable.subjects" :key="subject.id">
-          {{ subject }}
-        </td>
-        <td>
-          <v-btn icon x-small class="mr-4"><v-icon>mdi-pencil</v-icon></v-btn>
-          <v-btn icon x-small @click.prevent="deleteTimeTable(index)"><v-icon>mdi-delete</v-icon></v-btn>
-        </td>
-      </tr>
-    </tbody>
-  </v-simple-table>
+  <v-row no-gutters justify="center">
+    <v-col v-if="timeTables.length" cols="12" align-self="center">
+      <v-simple-table fixed-header>
+        <thead class="text-center">
+          <tr>
+            <th v-for="(head, index) in tableHead" :key="index" class="text-center">
+              {{ head }}
+            </th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr v-for="(timeTable, index) in timeTables" :key="timeTable.id">
+            <td>{{ timeTable.day }}</td>
+            <td v-for="subject in timeTable.subjects" :key="subject.id">
+              {{ subject }}
+            </td>
+            <td>
+              <v-btn icon x-small class="mr-4" @click.prevent="editTimeTable(index)"><v-icon>mdi-pencil</v-icon></v-btn>
+              <v-btn icon x-small @click.prevent="deleteTimeTable(index)"><v-icon>mdi-delete</v-icon></v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-simple-table>
+    </v-col>
+    <v-col v-else align-self="center" class="text-center">
+      <v-btn @click.prevent="openCreateDialog" color="primary" class="font-weight-bold text-body-1" elevation="0" large
+        >時間割を追加</v-btn
+      >
+    </v-col>
+    <v-dialog :value="isOpenedCreateDialog">
+      <v-card>
+        <v-card-title>時間割を追加</v-card-title>
+        <v-card-text>
+          <v-row>
+            <v-col cols="6">
+              <v-text-field outlined label="1時間目" />
+            </v-col>
+            <v-col cols="6"><v-text-field outlined label="2時間目" /></v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -27,7 +49,9 @@ import { ref, defineComponent } from '@nuxtjs/composition-api'
 export default defineComponent({
   setup() {
     const tableHead = ['曜日', 1, 2, 3, 4, 5, '編集']
-    const timeTables = [
+    const timeTables = ref<Timetable[]>([])
+
+    timeTables.value = [
       {
         id: 1,
         day: '月',
@@ -56,9 +80,18 @@ export default defineComponent({
     ]
 
     const deleteTimeTable = (index: number) => {
+      timeTables.value.splice(index, 1)
+    }
+    const editTable = (index: number) => {
       console.debug(index)
     }
-    return { tableHead, timeTables, deleteTimeTable }
+
+    const isOpenedCreateDialog = ref(false)
+    const openCreateDialog = () => {
+      isOpenedCreateDialog.value = true
+    }
+
+    return { tableHead, timeTables, deleteTimeTable, editTable, isOpenedCreateDialog, openCreateDialog }
   }
 })
 </script>
