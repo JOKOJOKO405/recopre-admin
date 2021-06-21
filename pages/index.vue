@@ -6,13 +6,13 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, defineComponent } from '@nuxtjs/composition-api'
 export default defineComponent({
   setup() {
     const test = ref('test')
 
     return { test }
-  },
+  }
 })
 </script>
