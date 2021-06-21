@@ -1,4 +1,5 @@
 declare interface Timetable {
   id: number
-  subject: string
+  day: string
+  subjects: string[]
 }
