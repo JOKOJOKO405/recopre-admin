@@ -1,15 +1,15 @@
 <template>
-  <v-btn @click.prevent="clickAction" color="primary" class="font-weight-bold text-body-1" depressed large>
-    {{ btnText }}
+  <v-btn @click.prevent="clickAction" fab depressed color="primary">
+    <v-icon>{{ mdiIconName }}</v-icon>
   </v-btn>
 </template>
 
 <script>
 import { defineComponent } from '@nuxtjs/composition-api'
 export default defineComponent({
-  name: 'AppBtn',
+  name: 'AppIconBtn',
   props: {
-    btnText: {
+    mdiIconName: {
       type: String,
       required: true
     },

@@ -31,7 +31,20 @@
       :dialog-title="'時間割を追加'"
       :click-action="() => (isOpenedCreateDialog = false)"
     >
-      <v-form> </v-form>
+      <v-form ref="form" lazy-validation>
+        <v-row no-gutters>
+          <v-col cols="12">
+            <v-select outlined :items="days" label="曜日" />
+          </v-col>
+        </v-row>
+        <v-row no-gutters>
+          <v-col cols="10">
+            <v-text-field outlined label="1時間目" class="pr-4" />
+          </v-col>
+          <v-spacer />
+          <AppIconBtn :mdi-icon-name="'mdi-plus'" :clickAction="addTimeTable" />
+        </v-row>
+      </v-form>
     </AppDialog>
   </v-row>
 </template>
@@ -43,6 +56,7 @@ export default defineComponent({
     const tableHead = ['曜日', 1, 2, 3, 4, 5, '編集']
     const timeTables = ref<Timetable[]>([])
 
+    // TODO データベースから取ってくる
     timeTables.value = [
       {
         id: 1,
@@ -71,6 +85,8 @@ export default defineComponent({
       }
     ]
 
+    const days = ['月', '火', '水', '木', '金']
+
     const deleteTimeTable = (index: number) => {
       timeTables.value.splice(index, 1)
     }
@@ -83,7 +99,18 @@ export default defineComponent({
       isOpenedCreateDialog.value = true
     }
 
-    return { tableHead, timeTables, deleteTimeTable, editTimeTable, isOpenedCreateDialog, openCreateDialog }
+    const addTimeTable = () => {}
+
+    return {
+      tableHead,
+      timeTables,
+      deleteTimeTable,
+      editTimeTable,
+      isOpenedCreateDialog,
+      openCreateDialog,
+      days,
+      addTimeTable
+    }
   }
 })
 </script>
