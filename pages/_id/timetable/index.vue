@@ -24,23 +24,15 @@
       </v-simple-table>
     </v-col>
     <v-col v-else align-self="center" class="text-center">
-      <v-btn @click.prevent="openCreateDialog" color="primary" class="font-weight-bold text-body-1" elevation="0" large
-        >時間割を追加</v-btn
-      >
+      <AppBtn :click-action="openCreateDialog" :btn-text="'時間割を追加'" />
     </v-col>
-    <v-dialog :value="isOpenedCreateDialog">
-      <v-card>
-        <v-card-title>時間割を追加</v-card-title>
-        <v-card-text>
-          <v-row>
-            <v-col cols="6">
-              <v-text-field outlined label="1時間目" />
-            </v-col>
-            <v-col cols="6"><v-text-field outlined label="2時間目" /></v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <AppDialog
+      :is-opened-dialog="isOpenedCreateDialog"
+      :dialog-title="'時間割を追加'"
+      :click-action="() => (isOpenedCreateDialog = false)"
+    >
+      <v-form> </v-form>
+    </AppDialog>
   </v-row>
 </template>
 
@@ -82,7 +74,7 @@ export default defineComponent({
     const deleteTimeTable = (index: number) => {
       timeTables.value.splice(index, 1)
     }
-    const editTable = (index: number) => {
+    const editTimeTable = (index: number) => {
       console.debug(index)
     }
 
@@ -91,7 +83,7 @@ export default defineComponent({
       isOpenedCreateDialog.value = true
     }
 
-    return { tableHead, timeTables, deleteTimeTable, editTable, isOpenedCreateDialog, openCreateDialog }
+    return { tableHead, timeTables, deleteTimeTable, editTimeTable, isOpenedCreateDialog, openCreateDialog }
   }
 })
 </script>
