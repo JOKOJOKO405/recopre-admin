@@ -4,8 +4,8 @@
   </v-btn>
 </template>
 
-<script>
-import { defineComponent } from '@nuxtjs/composition-api'
+<script lang="ts">
+import { defineComponent, PropType } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'AppBtn',
   props: {
@@ -14,8 +14,8 @@ export default defineComponent({
       required: true
     },
     clickAction: {
-      type: () => {},
-      required: true
+      type: Function as PropType<() => Promise<any>>,
+      default: () => Promise.resolve()
     }
   }
 })

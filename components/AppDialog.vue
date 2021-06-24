@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from '@nuxtjs/composition-api'
+import { ref, defineComponent, PropType } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'AppDialog',
   props: {
@@ -30,8 +30,8 @@ export default defineComponent({
       required: true
     },
     clickAction: {
-      type: () => {},
-      required: true
+      type: Function as PropType<() => Promise<any>>,
+      default: () => Promise.resolve()
     }
   },
   setup(props) {}

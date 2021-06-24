@@ -1,11 +1,11 @@
 <template>
-  <v-btn @click.prevent="clickAction" fab depressed color="primary">
+  <v-btn @click.stop.prevent="clickAction" fab depressed color="primary">
     <v-icon>{{ mdiIconName }}</v-icon>
   </v-btn>
 </template>
 
-<script>
-import { defineComponent } from '@nuxtjs/composition-api'
+<script lang="ts">
+import { defineComponent, PropType } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'AppIconBtn',
   props: {
@@ -14,8 +14,8 @@ export default defineComponent({
       required: true
     },
     clickAction: {
-      type: () => {},
-      required: true
+      type: Function as PropType<() => Promise<any>>,
+      default: () => Promise.resolve()
     }
   }
 })

@@ -31,26 +31,36 @@
       :dialog-title="'時間割を追加'"
       :click-action="() => (isOpenedCreateDialog = false)"
     >
-      <v-form ref="form" lazy-validation>
+      <v-form ref="timetableForm" v-model="isValid" lazy-validation>
         <v-row no-gutters>
           <v-col cols="12">
             <v-select outlined :items="days" label="曜日" />
           </v-col>
         </v-row>
-        <v-row no-gutters>
-          <v-col cols="10">
-            <v-text-field outlined label="1時間目" class="pr-4" />
+        <v-row v-for="(item, index) in textFields" :key="index" no-gutters>
+          <v-col cols="9">
+            <v-text-field
+              v-model="textFields[index]"
+              :rules="rules.idRules"
+              outlined
+              :label="`${index + 1}時間目`"
+              class="pr-4"
+            />
           </v-col>
           <v-spacer />
-          <AppIconBtn :mdi-icon-name="'mdi-plus'" :clickAction="addTimeTable" />
+          <AppIconBtn :mdi-icon-name="'mdi-plus'" :click-action="addTimeTable" class="mr-3" />
+          <AppIconBtn :mdi-icon-name="'mdi-minus'" :click-action="removeTimeTable" />
         </v-row>
       </v-form>
+      <AppBtn :on-click="createTimetable" :btn-text="'時間割作成'" />
     </AppDialog>
   </v-row>
 </template>
 
 <script lang="ts">
 import { ref, defineComponent } from '@nuxtjs/composition-api'
+import useValidationRules from '~/modules/useValidationRules'
+
 export default defineComponent({
   setup() {
     const tableHead = ['曜日', 1, 2, 3, 4, 5, '編集']
@@ -99,7 +109,30 @@ export default defineComponent({
       isOpenedCreateDialog.value = true
     }
 
-    const addTimeTable = () => {}
+    const { idRules } = useValidationRules()
+
+    const rules = {
+      id: idRules()
+    }
+    const isValid = ref(false)
+
+    const timetableForm = ref<any>(null)
+
+    // input操作
+    const textFields = ref<any>([''])
+
+    const addTimeTable = () => {
+      textFields.value.push('')
+    }
+    const removeTimeTable = (index: number) => {
+      if (textFields.value.length < 2) return
+      textFields.value.splice(index, 1)
+    }
+    const createTimetable = () => {
+      isValid.value = true
+      // if (!timetableForm.value!.validate()) return
+      console.debug('送信')
+    }
 
     return {
       tableHead,
@@ -109,7 +142,13 @@ export default defineComponent({
       isOpenedCreateDialog,
       openCreateDialog,
       days,
-      addTimeTable
+      addTimeTable,
+      isValid,
+      rules,
+      removeTimeTable,
+      textFields,
+      createTimetable,
+      timetableForm
     }
   }
 })
