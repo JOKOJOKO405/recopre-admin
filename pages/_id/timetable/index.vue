@@ -116,7 +116,7 @@ export default defineComponent({
     }
     const isValid = ref(false)
 
-    const timetableForm = ref<any>(null)
+    const timetableForm = ref<HTMLFormElement | null>(null)
 
     // input操作
     const textFields = ref<any>([''])
