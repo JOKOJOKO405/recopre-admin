@@ -3,3 +3,7 @@ declare interface Timetable {
   day: string
   subjects: string[]
 }
+declare interface TimetableInput {
+  id: number
+  text: string | null
+}
