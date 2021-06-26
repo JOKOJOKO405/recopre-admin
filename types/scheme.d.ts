@@ -1,7 +1,6 @@
 declare interface Timetable {
-  id: number
   day: string
-  subjects: string[]
+  subjects: TimetableInput[]
 }
 declare interface TimetableInput {
   id: number

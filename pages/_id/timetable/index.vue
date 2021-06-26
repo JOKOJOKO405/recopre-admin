@@ -1,40 +1,54 @@
 <template>
-  <v-row v-if="!$fetchState.pending" no-gutters justify="center">
-    <v-col v-if="timeTables.length" cols="12" align-self="center">
-      <v-simple-table fixed-header>
-        <thead class="text-center">
-          <tr>
-            <th v-for="(head, index) in tableHead" :key="index" class="text-center">
-              {{ head }}
-            </th>
-          </tr>
-        </thead>
-        <tbody class="text-center">
-          <tr v-for="(timeTable, index) in timeTables" :key="timeTable.id">
-            <td>{{ timeTable.day }}</td>
-            <td v-for="subject in timeTable.subjects" :key="subject.id">
-              {{ subject }}
-            </td>
-            <td>
-              <v-btn icon x-small class="mr-4" @click.prevent="editTimeTable(index)"><v-icon>mdi-pencil</v-icon></v-btn>
-              <v-btn icon x-small @click.prevent="deleteTimeTable(index)"><v-icon>mdi-delete</v-icon></v-btn>
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-    </v-col>
-    <v-col v-else align-self="center" class="text-center">
-      <AppBtn :click-action="openCreateDialog" :btn-text="'時間割を追加'" />
-    </v-col>
+  <v-container v-if="!$fetchState.pending" fluid>
+    <v-row no-gutters justify="center">
+      <v-col cols="12" align-self="center">
+        <v-simple-table fixed-header>
+          <thead class="text-center">
+            <tr>
+              <th v-for="(head, index) in tableHead" :key="index" class="text-center">
+                {{ head }}
+              </th>
+            </tr>
+          </thead>
+          <tbody v-if="timeTables.length" class="text-center">
+            <tr v-for="(timeTable, index) in timeTables" :key="timeTable.id">
+              <td>{{ timeTable.day }}</td>
+              <td v-for="subject in timeTable.subjects" :key="subject.id">
+                {{ subject.text }}
+              </td>
+              <td>
+                <v-btn icon x-small class="mr-4" @click.prevent="editTimeTable(index)"
+                  ><v-icon>mdi-pencil</v-icon></v-btn
+                >
+                <v-btn icon x-small @click.prevent="deleteTimeTable(index)"><v-icon>mdi-delete</v-icon></v-btn>
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-col align-self="center" class="text-center">
+        <AppBtn :click-action="openCreateDialog" :btn-text="'時間割を追加'" />
+      </v-col>
+    </v-row>
     <AppDialog
       :is-opened-dialog="isOpenedCreateDialog"
-      :dialog-title="'時間割を追加'"
+      :dialog-title="isEdit ? '時間割を編集' : '時間割を追加'"
       :click-action="() => (isOpenedCreateDialog = false)"
     >
       <v-form ref="timetableForm" v-model="isValid" lazy-validation>
         <v-row no-gutters>
           <v-col cols="12">
-            <v-select outlined :rules="rules.select" :items="days" label="曜日" />
+            <v-select
+              v-model="days.value"
+              outlined
+              :rules="rules.select"
+              :items="days"
+              :item-value="isEdit ? 'days' : ''"
+              label="曜日"
+              @change="fetchDay($event)"
+            />
           </v-col>
         </v-row>
         <v-row v-for="(item, index) in textFields" :key="index" no-gutters>
@@ -45,10 +59,10 @@
           <AppIconBtn :mdi-icon-name="'mdi-plus'" :click-action="addTimeTable" class="mr-3" />
           <AppIconBtn :mdi-icon-name="'mdi-minus'" :click-action="index => removeTimeTable(index)" />
         </v-row>
-        <AppBtn :click-action="createTimetable" :btn-text="'時間割作成'" />
+        <AppBtn :click-action="createTimetable" :btn-text="isEdit ? '時間割を修正' : '時間割作成'" />
       </v-form>
     </AppDialog>
-  </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -64,45 +78,36 @@ export default defineComponent({
 
     const { $fetchState } = useFetch(async () => {
       // TODO データベースから取ってくる
-      timeTables.value = await [
-        {
-          id: 1,
-          day: '月',
-          subjects: ['国語', '算数', '図工', '図工', '生活']
-        },
-        {
-          id: 2,
-          day: '火',
-          subjects: ['図書', '算数', '国語', '道徳', '音楽']
-        },
-        {
-          id: 3,
-          day: '水',
-          subjects: ['体育', '音楽', '生活', '国語', '算数']
-        },
-        {
-          id: 4,
-          day: '木',
-          subjects: ['国語', '書写', '算数', '体育', '音楽']
-        },
-        {
-          id: 5,
-          day: '金',
-          subjects: ['国語', '算数', '国語', '生活', '体育']
-        }
-      ]
+      // timeTables.value = await [
+      //   {
+      //     id: 1,
+      //     day: '月',
+      //     subjects: ['国語', '算数', '図工', '図工', '生活']
+      //   },
+      //   {
+      //     id: 2,
+      //     day: '火',
+      //     subjects: ['図書', '算数', '国語', '道徳', '音楽']
+      //   },
+      //   {
+      //     id: 3,
+      //     day: '水',
+      //     subjects: ['体育', '音楽', '生活', '国語', '算数']
+      //   },
+      //   {
+      //     id: 4,
+      //     day: '木',
+      //     subjects: ['国語', '書写', '算数', '体育', '音楽']
+      //   },
+      //   {
+      //     id: 5,
+      //     day: '金',
+      //     subjects: ['国語', '算数', '国語', '生活', '体育']
+      //   }
+      // ]
     })
-    const deleteTimeTable = (index: number) => {
-      timeTables.value.splice(index, 1)
-    }
-    const editTimeTable = (index: number) => {
-      console.debug(index)
-    }
 
     const isOpenedCreateDialog = ref(false)
-    const openCreateDialog = () => {
-      isOpenedCreateDialog.value = true
-    }
 
     const { textRules, selectRules } = useValidationRules()
 
@@ -130,8 +135,46 @@ export default defineComponent({
       if (textFields.value.length < 2) return
       textFields.value.splice(index, 1)
     }
+    const selectedDay = ref('')
+    const fetchDay = (event: any) => {
+      selectedDay.value = event
+    }
+
+    const openCreateDialog = () => {
+      selectedDay.value = ''
+      textFields.value = [{ id: 0, text: '' }]
+      isOpenedCreateDialog.value = true
+    }
+
     const createTimetable = () => {
       if (!timetableForm.value!.validate()) return
+      if (isEdit.value && !timetableId.value) {
+        timeTables.value[timetableId.value].day = selectedDay.value
+        timeTables.value[timetableId.value].subjects = textFields.value
+        isEdit.value = false
+      } else {
+        timeTables.value.push({
+          day: selectedDay.value,
+          subjects: textFields.value
+        })
+      }
+      isOpenedCreateDialog.value = false
+    }
+
+    // 編集
+    const isEdit = ref(false)
+    const timetableId = ref<number>(0)
+    const editTimeTable = (index: number) => {
+      isEdit.value = true
+      isOpenedCreateDialog.value = true
+      timetableId.value = index
+    }
+
+    // 削除
+    const deleteTimeTable = (index: number) => {
+      timeTables.value.splice(index, 1)
+      textFields.value = [{ id: 0, text: '' }]
+      selectedDay.value = ''
     }
 
     return {
@@ -140,7 +183,6 @@ export default defineComponent({
       deleteTimeTable,
       editTimeTable,
       isOpenedCreateDialog,
-      openCreateDialog,
       days,
       addTimeTable,
       isValid,
@@ -148,7 +190,10 @@ export default defineComponent({
       removeTimeTable,
       textFields,
       createTimetable,
-      timetableForm
+      timetableForm,
+      fetchDay,
+      isEdit,
+      openCreateDialog
     }
   }
 })
