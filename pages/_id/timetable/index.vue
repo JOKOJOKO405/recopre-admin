@@ -2,29 +2,7 @@
   <v-container v-if="!$fetchState.pending" fluid>
     <v-row no-gutters justify="center">
       <v-col cols="12" align-self="center">
-        <v-simple-table fixed-header>
-          <thead class="text-center">
-            <tr>
-              <th v-for="(head, index) in tableHead" :key="index" class="text-center">
-                {{ head }}
-              </th>
-            </tr>
-          </thead>
-          <tbody v-if="timeTables.length" class="text-center">
-            <tr v-for="(timeTable, index) in timeTables" :key="timeTable.id">
-              <td>{{ timeTable.day }}</td>
-              <td v-for="subject in timeTable.subjects" :key="subject.id">
-                {{ subject.text }}
-              </td>
-              <td>
-                <v-btn icon x-small class="mr-4" @click.prevent="editTimeTable(index)"
-                  ><v-icon>mdi-pencil</v-icon></v-btn
-                >
-                <v-btn icon x-small @click.prevent="deleteTimeTable(index)"><v-icon>mdi-delete</v-icon></v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </v-simple-table>
+        <Timetable :time-tables="timeTables" @edit-time-table="editTimeTable" @delete-time-table="deleteTimeTable" />
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -70,7 +48,6 @@ import { ref, defineComponent, useFetch } from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
 
 const days = ['月', '火', '水', '木', '金']
-const tableHead = ['曜日', 1, 2, 3, 4, 5, '編集']
 
 export default defineComponent({
   setup() {
@@ -178,7 +155,6 @@ export default defineComponent({
     }
 
     return {
-      tableHead,
       timeTables,
       deleteTimeTable,
       editTimeTable,
