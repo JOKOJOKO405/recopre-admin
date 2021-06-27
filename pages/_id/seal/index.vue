@@ -2,20 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col v-for="(card, index) in cardDatas" :key="index" cols="3">
-        <v-card>
-          <v-card-title class="justify-center">{{ card.name }}</v-card-title>
-          <v-img :src="card.src" />
-          <v-card-text class="text-center">レア度：{{ card.rate }}</v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn icon @click.prevent="editSeal(index)">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn icon @click.prevent="deleteSeal(index)">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+        <SealCard :card="card" :index="index" @edit-seal="editSeal" @delete-seal="deleteSeal" />
       </v-col>
     </v-row>
     <AppIconBtn
@@ -56,19 +43,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, useFetch, reactive } from '@nuxtjs/composition-api'
-// TODO データベースから
-const cards: any = [
-  { id: 1, src: '', text: 'ポケモン' },
-  { id: 2, src: '', text: 'ポケモン2' },
-  { id: 3, src: '', text: 'ポケモン3' },
-  { id: 4, src: '', text: 'ポケモン4' },
-  { id: 5, src: '', text: 'ポケモン5' },
-  { id: 6, src: '', text: 'ポケモン6' },
-  { id: 7, src: '', text: 'ポケモン7' },
-  { id: 8, src: '', text: 'ポケモン8' },
-  { id: 9, src: '', text: 'ポケモン9' },
-  { id: 10, src: '', text: 'ポケモン10' }
-]
 
 export default defineComponent({
   setup() {
@@ -135,7 +109,6 @@ export default defineComponent({
       // cardDatas.value = await xxx
     })
     return {
-      cards,
       isOpenedCreateDialog,
       createSeal,
       isEdit,
