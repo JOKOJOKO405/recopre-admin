@@ -20,3 +20,27 @@ declare interface PokemonDatas {
   src: string
   rate: number
 }
+
+// declare interface CalendarEvents {
+//   id?: number
+//   name: string
+//   start: any
+//   end?: any
+//   color: string
+//   timed: boolean
+// }
+
+declare interface CalendarDay {
+  date: string
+  day: number
+  future: boolean
+  hasDay: boolean
+  hours: number
+  minute: number
+  month: number
+  past: boolean
+  present: boolean
+  time: string
+  weekday: number
+  year: number
+}
