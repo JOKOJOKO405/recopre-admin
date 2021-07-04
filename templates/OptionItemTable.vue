@@ -11,15 +11,19 @@
       <tr v-for="(item, index) in items" :key="item.day">
         <td class="py-3">{{ item.day }}</td>
         <td class="py-3">
-          <p v-for="(list, index) in item.items" :key="index" class="mb-2">
-            {{ list.text }}
-          </p>
+          <span v-for="(list, index) in item.items" :key="index"> {{ list.text }}<br /> </span>
         </td>
         <td class="py-3">
           {{ item.limit ? 'あり' : 'なし' }}
         </td>
         <td class="py-3">
-          {{ item.limit && item.limitDay ? item.limitDay : '' }}
+          {{ item.limit && item.limitDay ? item.limitDay : '--' }}
+        </td>
+        <td class="py-3">
+          {{ item.repeat ? 'あり' : 'なし' }}
+        </td>
+        <td class="py-3">
+          {{ item.repeat && item.repeatDay ? item.repeatDay : '--' }}
         </td>
         <td class="py-3">
           <v-btn icon x-small class="mr-4" @click.prevent="editItem(index)"><v-icon>mdi-pencil</v-icon></v-btn>
@@ -32,7 +36,7 @@
 
 <script lang="ts">
 import { defineComponent } from '@nuxtjs/composition-api'
-const tableHead = ['日付', '持ち物', '締め切り', '締切日', '編集']
+const tableHead = ['日付', '持ち物', '締め切り', '締切日', '繰り返し', '繰り返し終了日', '編集']
 export default defineComponent({
   name: 'OptionItemTable',
   props: {

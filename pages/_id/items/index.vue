@@ -50,10 +50,15 @@
           <AppIconBtn :mdi-icon-name="'mdi-minus'" :click-action="index => remove(index)" />
         </v-row>
         <v-row>
-          <v-col>
+          <v-col cols="6">
             <v-switch v-model="hasDeadline" inset :label="`期限：${hasDeadline ? 'あり' : 'なし'}`" class="ma-0" />
           </v-col>
-          <v-col cols="12" v-if="hasDeadline">
+          <v-col cols="6">
+            <v-switch v-model="isRepeated" inset :label="`くり返し：${isRepeated ? 'あり' : 'なし'}`" class="ma-0" />
+          </v-col>
+        </v-row>
+        <v-row class="mb-6">
+          <v-col cols="6" v-if="hasDeadline">
             <v-menu
               v-model="limitedDay"
               :close-on-content-click="false"
@@ -65,7 +70,7 @@
                 <v-text-field
                   v-model="date"
                   :rules="rules.date"
-                  label="日付"
+                  label="期限"
                   prepend-icon="mdi-calendar"
                   v-bind="attrs"
                   v-on="on"
@@ -75,8 +80,44 @@
               <v-date-picker v-model="date" @input="choiceLimitedDay($event)" :rules="rules.date" no-title scrollable />
             </v-menu>
           </v-col>
+          <v-spacer v-if="isRepeated && !hasDeadline" />
+          <v-col cols="6" v-if="isRepeated">
+            <v-menu
+              v-model="repeatDay"
+              :close-on-content-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="date"
+                  :rules="rules.date"
+                  label="繰り返し終了日"
+                  prepend-icon="mdi-calendar"
+                  v-bind="attrs"
+                  v-on="on"
+                  readonly
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="date" @input="choiceRepeatDay($event)" :rules="rules.date" no-title scrollable />
+            </v-menu>
+          </v-col>
         </v-row>
-        <AppBtn :click-action="createItemList" :btn-text="isEdit ? '修正' : '追加'" />
+        <v-row>
+          <v-spacer />
+          <AppBtn
+            :click-action="
+              () => {
+                isOpenedCreateDialog = false
+              }
+            "
+            :btn-text="'キャンセル'"
+            is-outlined="true"
+            class="mr-4"
+          />
+          <AppBtn :click-action="createItemList" :btn-text="isEdit ? '修正' : '追加'" />
+        </v-row>
       </v-form>
     </AppDialog>
     <AppIconBtn
@@ -93,15 +134,16 @@ import useValidationRules from '@/modules/useValidationRules'
 import { useIncrementInputs } from '@/modules/useIncrementInputs'
 
 export default defineComponent({
+  // TODO: rootが非推奨、$nuxtは？
   setup(_, { root }) {
     const calendar = ref(false)
     const limitedDay = ref(false)
     const inputDay = ref<Date | null>(null)
     const dueDay = ref<Date | null>(null)
+    const repeatDay = ref<Date | null>(null)
     const events = ref<EventItems[]>([])
     const itemForm = ref<HTMLFormElement | null>(null)
 
-    // REMIND: 意味わからない
     const date = ref<Date | null>(null)
     // イベント追加編集フラグ
     const isOpenedCreateDialog = ref(false)
@@ -109,6 +151,7 @@ export default defineComponent({
     const isEdit = ref(false)
     const itemListId = ref(0)
     const hasDeadline = ref(false)
+    const isRepeated = ref(false)
 
     // input操作
     const { textRules, datePickerRules } = useValidationRules()
@@ -125,21 +168,30 @@ export default defineComponent({
       dueDay.value = event
       calendar.value = false
     }
+    const choiceRepeatDay = (event: Date) => {
+      repeatDay.value = event
+      calendar.value = false
+    }
 
     const createItemList = () => {
       if (!itemForm.value!.validate()) return
       if (isEdit.value && !itemListId.value) {
+        // REMIND: ここreactive?
         events.value[itemListId.value].day = inputDay.value!
         events.value[itemListId.value].items = textFields.value
         events.value[itemListId.value].limit = hasDeadline.value
         events.value[itemListId.value].limitDay = dueDay.value
+        events.value[itemListId.value].repeat = isRepeated.value
+        events.value[itemListId.value].repeatDay = repeatDay.value
         isEdit.value = false
       } else {
         events.value.push({
           day: inputDay.value!,
           items: textFields.value,
           limit: hasDeadline.value,
-          limitDay: dueDay.value
+          limitDay: dueDay.value,
+          repeat: isRepeated.value,
+          repeatDay: repeatDay.value
         })
       }
       isOpenedCreateDialog.value = false
@@ -183,11 +235,13 @@ export default defineComponent({
       hasDeadline,
       choiceDay,
       choiceLimitedDay,
+      choiceRepeatDay,
       createItemList,
       limitedDay,
       editItem,
       deleteItem,
-      itemListId
+      itemListId,
+      isRepeated
     }
   }
 })

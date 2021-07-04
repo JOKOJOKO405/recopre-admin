@@ -27,6 +27,8 @@ declare interface EventItems {
   items: TimetableInput[]
   limit: boolean
   limitDay?: Date | null
+  repeat: boolean
+  repeatDay?: Date | null
 }
 
 declare interface CalendarDay {
