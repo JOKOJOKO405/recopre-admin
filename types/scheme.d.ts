@@ -21,14 +21,13 @@ declare interface PokemonDatas {
   rate: number
 }
 
-// declare interface CalendarEvents {
-//   id?: number
-//   name: string
-//   start: any
-//   end?: any
-//   color: string
-//   timed: boolean
-// }
+declare interface EventItems {
+  id?: number
+  day: Date
+  items: TimetableInput[]
+  limit: boolean
+  limitDay?: Date | null
+}
 
 declare interface CalendarDay {
   date: string

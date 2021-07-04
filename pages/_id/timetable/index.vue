@@ -34,8 +34,8 @@
             <v-text-field v-model="item.text" :rules="rules.text" outlined :label="`${index + 1}時間目`" class="pr-4" />
           </v-col>
           <v-spacer />
-          <AppIconBtn :mdi-icon-name="'mdi-plus'" :click-action="addTimeTable" class="mr-3" />
-          <AppIconBtn :mdi-icon-name="'mdi-minus'" :click-action="index => removeTimeTable(index)" />
+          <AppIconBtn :mdi-icon-name="'mdi-plus'" :click-action="add" class="mr-3" />
+          <AppIconBtn :mdi-icon-name="'mdi-minus'" :click-action="index => remove(index)" />
         </v-row>
         <AppBtn :click-action="createTimetable" :btn-text="isEdit ? '時間割を修正' : '時間割作成'" />
       </v-form>
@@ -46,6 +46,7 @@
 <script lang="ts">
 import { ref, defineComponent, useFetch } from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
+import { useIncrementInputs } from '@/modules/useIncrementInputs'
 
 const days = ['月', '火', '水', '木', '金']
 
@@ -97,21 +98,8 @@ export default defineComponent({
     const timetableForm = ref<HTMLFormElement | null>(null)
 
     // input操作
-    const textFields = ref<TimetableInput[]>([
-      {
-        id: 0,
-        text: ''
-      }
-    ])
+    const { textFields, add, remove } = useIncrementInputs()
 
-    const addTimeTable = () => {
-      const newId = textFields.value.slice(-1)[0].id + 1
-      textFields.value.push({ id: newId, text: '' })
-    }
-    const removeTimeTable = (index: number) => {
-      if (textFields.value.length < 2) return
-      textFields.value.splice(index, 1)
-    }
     const selectedDay = ref('')
     const fetchDay = (event: any) => {
       selectedDay.value = event
@@ -160,10 +148,10 @@ export default defineComponent({
       editTimeTable,
       isOpenedCreateDialog,
       days,
-      addTimeTable,
+      add,
       isValid,
       rules,
-      removeTimeTable,
+      remove,
       textFields,
       createTimetable,
       timetableForm,
