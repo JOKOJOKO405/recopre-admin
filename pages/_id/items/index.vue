@@ -1,5 +1,10 @@
 <template>
   <v-container fluid>
+    <v-row no-gutters justify="center">
+      <v-col cols="12" align-self="center">
+        <OptionItemTable :items="events" @edit-item="editItem" @delete-item="deleteItem" />
+      </v-col>
+    </v-row>
     <AppDialog
       :is-opened-dialog="isOpenedCreateDialog"
       :dialog-title="isEdit ? '持ち物を編集' : '持ち物を追加'"
@@ -7,7 +12,7 @@
     >
       <v-form ref="itemForm" v-model="isValid">
         <v-row>
-          <v-col cols="12">
+          <v-col cols="12" class="mb-4">
             <v-menu
               v-model="calendar"
               :close-on-content-click="false"
@@ -18,6 +23,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   v-model="date"
+                  :rules="rules.date"
                   label="日付"
                   prepend-icon="mdi-calendar"
                   v-bind="attrs"
@@ -58,6 +64,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   v-model="date"
+                  :rules="rules.date"
                   label="日付"
                   prepend-icon="mdi-calendar"
                   v-bind="attrs"
@@ -65,7 +72,7 @@
                   readonly
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="date" @input="choiceLimitedDay($event)" no-title scrollable />
+              <v-date-picker v-model="date" @input="choiceLimitedDay($event)" :rules="rules.date" no-title scrollable />
             </v-menu>
           </v-col>
         </v-row>
@@ -81,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, useFetch, reactive } from '@nuxtjs/composition-api'
+import { defineComponent, ref, useFetch } from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
 import { useIncrementInputs } from '@/modules/useIncrementInputs'
 
@@ -92,21 +99,23 @@ export default defineComponent({
     const inputDay = ref<Date | null>(null)
     const dueDay = ref<Date | null>(null)
     const events = ref<EventItems[]>([])
+    const itemForm = ref<HTMLFormElement | null>(null)
 
     // REMIND: 意味わからない
-    const date = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)
+    const date = ref<Date | null>(null)
     // イベント追加編集フラグ
     const isOpenedCreateDialog = ref(false)
     const isValid = ref(false)
     const isEdit = ref(false)
+    const itemListId = ref(0)
     const hasDeadline = ref(false)
 
-    //TODO: モジュール化 input操作
-    const { textRules, selectRules } = useValidationRules()
+    // input操作
+    const { textRules, datePickerRules } = useValidationRules()
     const { textFields, add, remove } = useIncrementInputs()
     const rules = {
       text: textRules(),
-      select: selectRules()
+      date: datePickerRules()
     }
     const choiceDay = (event: Date) => {
       inputDay.value = event
@@ -117,15 +126,34 @@ export default defineComponent({
       calendar.value = false
     }
 
-    const createItemList = (index: number) => {
-      events.value.push({
-        day: inputDay.value!,
-        items: textFields.value,
-        limit: hasDeadline.value,
-        limitDay: dueDay.value
-      })
-      console.debug(events.value)
+    const createItemList = () => {
+      if (!itemForm.value!.validate()) return
+      if (isEdit.value && !itemListId.value) {
+        events.value[itemListId.value].day = inputDay.value!
+        events.value[itemListId.value].items = textFields.value
+        events.value[itemListId.value].limit = hasDeadline.value
+        events.value[itemListId.value].limitDay = dueDay.value
+        isEdit.value = false
+      } else {
+        events.value.push({
+          day: inputDay.value!,
+          items: textFields.value,
+          limit: hasDeadline.value,
+          limitDay: dueDay.value
+        })
+      }
       isOpenedCreateDialog.value = false
+    }
+
+    const editItem = (index: number) => {
+      isEdit.value = true
+      isOpenedCreateDialog.value = true
+      itemListId.value = index
+    }
+    const deleteItem = (index: number) => {
+      events.value.splice(index, 1)
+      textFields.value = [{ id: 0, text: '' }]
+      inputDay.value = null
     }
     // init
     const { $fetchState } = useFetch(async () => {
@@ -134,6 +162,8 @@ export default defineComponent({
     })
 
     return {
+      itemForm,
+      events,
       calendar,
       isOpenedCreateDialog,
       isValid,
@@ -147,8 +177,19 @@ export default defineComponent({
       choiceDay,
       choiceLimitedDay,
       createItemList,
-      limitedDay
+      limitedDay,
+      editItem,
+      deleteItem,
+      itemListId
     }
   }
 })
 </script>
+
+<style scoped>
+.float-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+}
+</style>

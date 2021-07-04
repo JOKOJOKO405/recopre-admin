@@ -12,5 +12,9 @@ export default () => {
   const selectRules = (): validateFunc[] => [
     v => !!v || '曜日を選択してください'
   ]
-  return {textRules, selectRules}
+
+  const datePickerRules = (): validateFunc[] => [
+    v => !!v || '日付を選択してください'
+  ]
+  return {textRules, selectRules, datePickerRules}
 }
