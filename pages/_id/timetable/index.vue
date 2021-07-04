@@ -44,14 +44,14 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, useFetch } from '@nuxtjs/composition-api'
+import { ref, defineComponent, useFetch, onMounted } from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
 import { useIncrementInputs } from '@/modules/useIncrementInputs'
 
 const days = ['月', '火', '水', '木', '金']
 
 export default defineComponent({
-  setup() {
+  setup(_, { root }) {
     const timeTables = ref<Timetable[]>([])
 
     const { $fetchState } = useFetch(async () => {
@@ -141,6 +141,13 @@ export default defineComponent({
       textFields.value = [{ id: 0, text: '' }]
       selectedDay.value = ''
     }
+    // ヘッダータイトル
+    const updateHeaderTitle = () => {
+      root.$nuxt.$emit('updateHeaderTitle', '時間割')
+    }
+    onMounted(() => {
+      updateHeaderTitle()
+    })
 
     return {
       timeTables,

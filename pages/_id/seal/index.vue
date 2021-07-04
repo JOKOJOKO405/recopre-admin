@@ -42,10 +42,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useFetch, reactive } from '@nuxtjs/composition-api'
+import { defineComponent, ref, useFetch, reactive, onMounted } from '@nuxtjs/composition-api'
 
 export default defineComponent({
-  setup() {
+  setup(_, { root }) {
     // カードデータ
     const cardDatas = ref<PokemonDatas[]>([])
     const pokemon = reactive({
@@ -107,6 +107,14 @@ export default defineComponent({
     /* init */
     const { $fetchState } = useFetch(async () => {
       // cardDatas.value = await xxx
+    })
+
+    // ヘッダータイトル
+    const updateHeaderTitle = () => {
+      root.$nuxt.$emit('updateHeaderTitle', 'シール')
+    }
+    onMounted(() => {
+      updateHeaderTitle()
     })
     return {
       isOpenedCreateDialog,

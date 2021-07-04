@@ -88,12 +88,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useFetch } from '@nuxtjs/composition-api'
+import { defineComponent, ref, useFetch, onMounted } from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
 import { useIncrementInputs } from '@/modules/useIncrementInputs'
 
 export default defineComponent({
-  setup() {
+  setup(_, { root }) {
     const calendar = ref(false)
     const limitedDay = ref(false)
     const inputDay = ref<Date | null>(null)
@@ -155,6 +155,13 @@ export default defineComponent({
       textFields.value = [{ id: 0, text: '' }]
       inputDay.value = null
     }
+    // ヘッダータイトル
+    const updateHeaderTitle = () => {
+      root.$nuxt.$emit('updateHeaderTitle', '持ち物')
+    }
+    onMounted(() => {
+      updateHeaderTitle()
+    })
     // init
     const { $fetchState } = useFetch(async () => {
       // TODO: バックから取ってくる
