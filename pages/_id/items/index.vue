@@ -132,26 +132,33 @@
 import { defineComponent, ref, useFetch, onMounted } from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
 import { useIncrementInputs } from '@/modules/useIncrementInputs'
+import { useItemDialogForm } from '~/modules/useItemDialogForm'
 
 export default defineComponent({
   // TODO: rootが非推奨、$nuxtは？
   setup(_, { root }) {
-    const calendar = ref(false)
-    const limitedDay = ref(false)
-    const inputDay = ref<Date | null>(null)
-    const dueDay = ref<Date | null>(null)
-    const repeatDay = ref<Date | null>(null)
     const events = ref<EventItems[]>([])
     const itemForm = ref<HTMLFormElement | null>(null)
-
-    const date = ref<Date | null>(null)
     // イベント追加編集フラグ
     const isOpenedCreateDialog = ref(false)
     const isValid = ref(false)
     const isEdit = ref(false)
     const itemListId = ref(0)
-    const hasDeadline = ref(false)
-    const isRepeated = ref(false)
+
+    const {
+      hasDeadline,
+      isRepeated,
+      calendar,
+      limitedDay,
+      repeatDay,
+      inputDay,
+      dueDay,
+      repeatEnd,
+      date,
+      choiceDay,
+      choiceLimitedDay,
+      choiceRepeatDay
+    } = useItemDialogForm()
 
     // input操作
     const { textRules, datePickerRules } = useValidationRules()
@@ -159,18 +166,6 @@ export default defineComponent({
     const rules = {
       text: textRules(),
       date: datePickerRules()
-    }
-    const choiceDay = (event: Date) => {
-      inputDay.value = event
-      calendar.value = false
-    }
-    const choiceLimitedDay = (event: Date) => {
-      dueDay.value = event
-      calendar.value = false
-    }
-    const choiceRepeatDay = (event: Date) => {
-      repeatDay.value = event
-      calendar.value = false
     }
 
     const createItemList = () => {
@@ -182,7 +177,7 @@ export default defineComponent({
         events.value[itemListId.value].limit = hasDeadline.value
         events.value[itemListId.value].limitDay = dueDay.value
         events.value[itemListId.value].repeat = isRepeated.value
-        events.value[itemListId.value].repeatDay = repeatDay.value
+        events.value[itemListId.value].repeatDay = repeatEnd.value
         isEdit.value = false
       } else {
         events.value.push({
@@ -191,7 +186,7 @@ export default defineComponent({
           limit: hasDeadline.value,
           limitDay: dueDay.value,
           repeat: isRepeated.value,
-          repeatDay: repeatDay.value
+          repeatDay: repeatEnd.value
         })
       }
       isOpenedCreateDialog.value = false
@@ -241,7 +236,9 @@ export default defineComponent({
       editItem,
       deleteItem,
       itemListId,
-      isRepeated
+      isRepeated,
+      repeatEnd,
+      repeatDay
     }
   }
 })
