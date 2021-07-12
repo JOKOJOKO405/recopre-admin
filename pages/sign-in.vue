@@ -4,10 +4,31 @@
       <v-card class="pa-8">
         <h1 class="text-center mb-8">ログイン</h1>
         <v-form ref="loginForm" v-model="isValid" lazy-validation>
-          <v-text-field outlined label="ID" v-model="user.id" :rules="rules.id" />
-          <v-text-field outlined label="パスワード" v-model="user.password" :rules="rules.password" class="mb-4" />
-          <AppBtn :click-action="login" :btn-text="'ログイン'" :block="true" class="mb-4" />
-          <AppBtn :click-action="login" :btn-text="'ユーザー登録はこちら'" is-outlined="true" :block="true" />
+          <v-text-field
+            outlined
+            label="ID"
+            v-model="user.id"
+            :rules="rules.id"
+          />
+          <v-text-field
+            outlined
+            label="パスワード"
+            v-model="user.password"
+            :rules="rules.password"
+            class="mb-4"
+          />
+          <AppBtn
+            :click-action="login"
+            :btn-text="'ログイン'"
+            :block="true"
+            class="mb-4"
+          />
+          <AppBtn
+            :click-action="login"
+            :btn-text="'ユーザー登録はこちら'"
+            is-outlined="true"
+            :block="true"
+          />
         </v-form>
       </v-card>
     </v-col>

@@ -11,7 +11,9 @@
         app
       />
       <v-col>
-        <h1 class="white--text text-center" style="font-size: 1.5rem">{{ pageTitle }}</h1>
+        <h1 class="white--text text-center" style="font-size: 1.5rem">
+          {{ pageTitle }}
+        </h1>
       </v-col>
     </v-app-bar>
     <v-navigation-drawer v-model="isOpened" absolute left temporary>

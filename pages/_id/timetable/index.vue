@@ -2,7 +2,11 @@
   <v-container v-if="!$fetchState.pending" fluid>
     <v-row no-gutters justify="center">
       <v-col cols="12" align-self="center">
-        <Timetable :time-tables="timeTables" @edit-time-table="editTimeTable" @delete-time-table="deleteTimeTable" />
+        <Timetable
+          :time-tables="timeTables"
+          @edit-time-table="editTimeTable"
+          @delete-time-table="deleteTimeTable"
+        />
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -31,20 +35,41 @@
         </v-row>
         <v-row v-for="(item, index) in textFields" :key="index" no-gutters>
           <v-col cols="9">
-            <v-text-field v-model="item.text" :rules="rules.text" outlined :label="`${index + 1}時間目`" class="pr-4" />
+            <v-text-field
+              v-model="item.text"
+              :rules="rules.text"
+              outlined
+              :label="`${index + 1}時間目`"
+              class="pr-4"
+            />
           </v-col>
           <v-spacer />
-          <AppIconBtn :mdi-icon-name="'mdi-plus'" :click-action="add" class="mr-3" />
-          <AppIconBtn :mdi-icon-name="'mdi-minus'" :click-action="index => remove(index)" />
+          <AppIconBtn
+            :mdi-icon-name="'mdi-plus'"
+            :click-action="add"
+            class="mr-3"
+          />
+          <AppIconBtn
+            :mdi-icon-name="'mdi-minus'"
+            :click-action="index => remove(index)"
+          />
         </v-row>
-        <AppBtn :click-action="createTimetable" :btn-text="isEdit ? '時間割を修正' : '時間割作成'" />
+        <AppBtn
+          :click-action="createTimetable"
+          :btn-text="isEdit ? '時間割を修正' : '時間割作成'"
+        />
       </v-form>
     </AppDialog>
   </v-container>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, useFetch, onMounted } from '@nuxtjs/composition-api'
+import {
+  ref,
+  defineComponent,
+  useFetch,
+  onMounted
+} from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
 import { useIncrementInputs } from '@/modules/useIncrementInputs'
 

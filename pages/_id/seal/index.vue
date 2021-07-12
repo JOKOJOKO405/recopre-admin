@@ -2,7 +2,12 @@
   <v-container fluid>
     <v-row>
       <v-col v-for="(card, index) in cardDatas" :key="index" cols="3">
-        <SealCard :card="card" :index="index" @edit-seal="editSeal" @delete-seal="deleteSeal" />
+        <SealCard
+          :card="card"
+          :index="index"
+          @edit-seal="editSeal"
+          @delete-seal="deleteSeal"
+        />
       </v-col>
     </v-row>
     <AppIconBtn
@@ -28,21 +33,34 @@
         />
         <v-row>
           <v-col>
-            <v-text-field v-model="pokemon.name" label="ポケモンの名前" outlined />
+            <v-text-field
+              v-model="pokemon.name"
+              label="ポケモンの名前"
+              outlined
+            />
           </v-col>
           <v-col>
             <span>レア度</span>
             <v-rating length="5" v-model="pokemon.rate" />
           </v-col>
         </v-row>
-        <AppBtn :click-action="createSeal" :btn-text="isEdit ? 'シールを修正' : 'シール追加'" />
+        <AppBtn
+          :click-action="createSeal"
+          :btn-text="isEdit ? 'シールを修正' : 'シール追加'"
+        />
       </v-form>
     </AppDialog>
   </v-container>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useFetch, reactive, onMounted } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  useFetch,
+  reactive,
+  onMounted
+} from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup(_, { root }) {

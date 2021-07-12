@@ -2,7 +2,11 @@
   <v-container fluid>
     <v-row no-gutters justify="center">
       <v-col cols="12" align-self="center">
-        <OptionItemTable :items="events" @edit-item="editItem" @delete-item="deleteItem" />
+        <OptionItemTable
+          :items="events"
+          @edit-item="editItem"
+          @delete-item="deleteItem"
+        />
       </v-col>
     </v-row>
     <AppDialog
@@ -31,7 +35,12 @@
                   readonly
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="date" @input="choiceDay($event)" no-title scrollable />
+              <v-date-picker
+                v-model="date"
+                @input="choiceDay($event)"
+                no-title
+                scrollable
+              />
             </v-menu>
           </v-col>
         </v-row>
@@ -46,15 +55,32 @@
             />
           </v-col>
           <v-spacer />
-          <AppIconBtn :mdi-icon-name="'mdi-plus'" :click-action="add" class="mr-3" />
-          <AppIconBtn :mdi-icon-name="'mdi-minus'" :click-action="index => remove(index)" />
+          <AppIconBtn
+            :mdi-icon-name="'mdi-plus'"
+            :click-action="add"
+            class="mr-3"
+          />
+          <AppIconBtn
+            :mdi-icon-name="'mdi-minus'"
+            :click-action="index => remove(index)"
+          />
         </v-row>
         <v-row>
           <v-col cols="6">
-            <v-switch v-model="hasDeadline" inset :label="`期限：${hasDeadline ? 'あり' : 'なし'}`" class="ma-0" />
+            <v-switch
+              v-model="hasDeadline"
+              inset
+              :label="`期限：${hasDeadline ? 'あり' : 'なし'}`"
+              class="ma-0"
+            />
           </v-col>
           <v-col cols="6">
-            <v-switch v-model="isRepeated" inset :label="`くり返し：${isRepeated ? 'あり' : 'なし'}`" class="ma-0" />
+            <v-switch
+              v-model="isRepeated"
+              inset
+              :label="`くり返し：${isRepeated ? 'あり' : 'なし'}`"
+              class="ma-0"
+            />
           </v-col>
         </v-row>
         <v-row class="mb-6">
@@ -77,7 +103,13 @@
                   readonly
                 ></v-text-field>
               </template>
-              <v-date-picker v-model="date" @input="choiceLimitedDay($event)" :rules="rules.date" no-title scrollable />
+              <v-date-picker
+                v-model="date"
+                @input="choiceLimitedDay($event)"
+                :rules="rules.date"
+                no-title
+                scrollable
+              />
             </v-menu>
           </v-col>
           <v-spacer v-if="isRepeated && !hasDeadline" />
@@ -98,9 +130,15 @@
                   v-bind="attrs"
                   v-on="on"
                   readonly
-                ></v-text-field>
+                />
               </template>
-              <v-date-picker v-model="date" @input="choiceRepeatDay($event)" :rules="rules.date" no-title scrollable />
+              <v-date-picker
+                v-model="date"
+                @input="choiceRepeatDay($event)"
+                :rules="rules.date"
+                no-title
+                scrollable
+              />
             </v-menu>
           </v-col>
         </v-row>
@@ -116,7 +154,10 @@
             is-outlined="true"
             class="mr-4"
           />
-          <AppBtn :click-action="createItemList" :btn-text="isEdit ? '修正' : '追加'" />
+          <AppBtn
+            :click-action="createItemList"
+            :btn-text="isEdit ? '修正' : '追加'"
+          />
         </v-row>
       </v-form>
     </AppDialog>
@@ -129,7 +170,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useFetch, onMounted } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  ref,
+  useFetch,
+  onMounted
+} from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
 import { useIncrementInputs } from '@/modules/useIncrementInputs'
 import { useItemDialogForm } from '~/modules/useItemDialogForm'
