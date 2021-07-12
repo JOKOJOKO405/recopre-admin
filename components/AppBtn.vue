@@ -7,6 +7,7 @@
     :class="isOutlined ? 'primary--text' : 'white--text'"
     depressed
     large
+    :block="block"
   >
     {{ btnText }}
   </v-btn>
@@ -26,6 +27,10 @@ export default defineComponent({
       default: () => Promise.resolve()
     },
     isOutlined: {
+      type: Boolean,
+      default: false
+    },
+    block: {
       type: Boolean,
       default: false
     }
