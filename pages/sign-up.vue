@@ -2,7 +2,7 @@
   <v-row justify="center" align-content="center" style="height: 100%">
     <v-col cols="6" align-self="center">
       <v-card class="pa-8" elevation="0">
-        <h1 class="text-center mb-8">ログイン</h1>
+        <h1 class="text-center mb-8">新規登録</h1>
         <v-form ref="loginForm" v-model="isValid" lazy-validation>
           <v-text-field
             outlined
@@ -18,15 +18,23 @@
             type="password"
             class="mb-4"
           />
+          <v-text-field
+            outlined
+            label="パスワード確認"
+            v-model="user.password"
+            :rules="rules.password"
+            type="password"
+            class="mb-4"
+          />
           <AppBtn
-            :click-action="login"
-            :btn-text="'ログイン'"
+            :click-action="register"
+            :btn-text="'登録する'"
             :block="true"
             class="mb-4"
           />
           <AppBtn
-            :click-action="goToSignUp"
-            :btn-text="'ユーザー登録はこちら'"
+            :click-action="goToLogin"
+            :btn-text="'ログインへ戻る'"
             :is-outlined="true"
             :block="true"
           />
@@ -59,13 +67,13 @@ export default defineComponent({
       id: textRules(),
       password: passwordRules()
     }
-    const login = () => {
+    const register = () => {
       if (!loginForm.value!.validate()) return
     }
-    const goToSignUp = () => {
-      router.push('/sign-up')
+    const goToLogin = () => {
+      router.push('/sign-in')
     }
-    return { loginForm, user, isValid, rules, login, goToSignUp }
+    return { loginForm, user, isValid, rules, register, goToLogin }
   }
 })
 </script>
