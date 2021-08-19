@@ -6,14 +6,14 @@ export default {
     titleTemplate: '%s - recopre-admin',
     title: 'recopre-admin',
     htmlAttrs: {
-      lang: 'ja',
+      lang: 'ja'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: '' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   ssr: false,
 
@@ -32,11 +32,11 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
-    '@nuxtjs/composition-api/module',
+    '@nuxtjs/composition-api/module'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  // modules: ['nuxt-client-init-module'],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -45,18 +45,19 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: colors.pink.lighten1,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
+          primary: '#5EA0FF',
+          accent: '#FFC83D',
+          secondary: '#F1F8FF',
+          info: '#8DD24E',
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: '#DB221B',
           success: colors.green.accent3,
-        },
-      },
-    },
+          gray600: '#A8A8A8'
+        }
+      }
+    }
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {}
 }

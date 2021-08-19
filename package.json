@@ -15,7 +15,9 @@
     "@nuxtjs/composition-api": "^0.24.4",
     "core-js": "^3.9.1",
     "dotenv": "^10.0.0",
-    "nuxt": "^2.15.3"
+    "nuxt": "^2.15.3",
+    "nuxt-client-init-module": "^0.3.0",
+    "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.3",
