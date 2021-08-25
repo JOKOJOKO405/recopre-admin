@@ -1,4 +1,4 @@
-import { defineComponent, ref } from '@nuxtjs/composition-api'
+import { ref } from '@nuxtjs/composition-api'
 
 export const useItemDialogForm = () => {
   const hasDeadline = ref(false)
