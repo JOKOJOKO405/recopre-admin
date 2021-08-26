@@ -9,16 +9,11 @@
         />
       </div>
       <div v-if="pokemon" class="text-center">
-        <p class="mb-1">今回のシールは</p>
-        <p>
-          <span class="text-h4 accent--text font-weight-bold">
-            {{ pokemon.name }}
-          </span>
-          だよ
-        </p>
+        <p class="text-h4 mb-1 font-weight-bold">{{ pokemon.name }}</p>
         <div class="pokemon-img">
           <img :src="pokemon.src" :alt="pokemon.name" />
         </div>
+        <p class="ma-0">あつめた枚数：{{ count }}枚</p>
       </div>
       <div class="d-flex">
         <v-spacer />
@@ -29,7 +24,7 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 
 export default defineComponent({
   props: {
@@ -41,6 +36,9 @@ export default defineComponent({
       type: Object
     }
   },
-  setup() {}
+  setup() {
+    const count = ref(12)
+    return { count }
+  }
 })
 </script>
