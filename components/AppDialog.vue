@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, PropType } from '@nuxtjs/composition-api'
+import { defineComponent, PropType } from '@nuxtjs/composition-api'
 export default defineComponent({
   name: 'AppDialog',
   props: {

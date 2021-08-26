@@ -1,4 +1,4 @@
-import { ref } from '@nuxtjs/composition-api'
+import { ref, reactive } from '@nuxtjs/composition-api'
 
 export const useSealCard = () => {
   const seals = [
@@ -43,5 +43,8 @@ export const useSealCard = () => {
       src: require('@/assets/images/pokemons/00010_kamonegi.png')
     }
   ]
-  return { seals }
+
+  // TODO: 名前・id・拾った日・リンク
+  const pokemon = ref<PokemonDatas>()
+  return { seals, pokemon }
 }

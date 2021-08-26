@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    @click.prevent="clickAction"
+    @click.prevent="$emit('click')"
     :outlined="isOutlined"
     :color="isOutlined ? 'white' : 'primary'"
     class="font-weight-bold text-body-1"
@@ -21,10 +21,6 @@ export default defineComponent({
     btnText: {
       type: String,
       required: true
-    },
-    clickAction: {
-      type: Function as PropType<() => Promise<any>>,
-      default: () => Promise.resolve()
     },
     isOutlined: {
       type: Boolean,
