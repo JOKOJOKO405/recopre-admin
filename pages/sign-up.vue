@@ -27,13 +27,13 @@
             class="mb-4"
           />
           <AppBtn
-            :click-action="register"
+            @click="register"
             :btn-text="'登録する'"
             :block="true"
             class="mb-4"
           />
           <AppBtn
-            :click-action="goToLogin"
+            @click="goToLogin"
             :btn-text="'ログインへ戻る'"
             :is-outlined="true"
             :block="true"

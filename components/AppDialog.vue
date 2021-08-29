@@ -6,7 +6,7 @@
           {{ dialogTitle }}
         </v-card-title>
         <v-spacer />
-        <v-btn @click="clickAction" icon><v-icon>mdi-close</v-icon></v-btn>
+        <v-btn @click="$emit('click')" icon><v-icon>mdi-close</v-icon></v-btn>
       </v-row>
       <v-divider class="mb-6" />
       <v-card-text>
@@ -28,10 +28,6 @@ export default defineComponent({
     dialogTitle: {
       type: String,
       required: true
-    },
-    clickAction: {
-      type: Function as PropType<() => Promise<any>>,
-      default: () => Promise.resolve()
     }
   },
   setup(props) {}

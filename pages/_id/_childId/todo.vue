@@ -15,7 +15,11 @@
           <v-switch inset v-model="list.value" />
         </p>
       </div>
-      <AppBtn btn-text="おわった！" class="d-block mx-auto mt-10" />
+      <AppBtn
+        btn-text="おわった！"
+        class="d-block mx-auto mt-10"
+        @click="finishTodos"
+      />
     </v-form>
   </v-container>
 </template>
@@ -31,7 +35,10 @@ export default defineComponent({
       { text: '給食セット', value: false }
     ])
     const time = '10分32秒'
-    return { lists, time }
+    const finishTodos = () => {
+      // TODO: バリデーションチェック
+    }
+    return { lists, time, finishTodos }
   }
 })
 </script>
