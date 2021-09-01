@@ -14,12 +14,12 @@ export default () => {
     (v: string) => v.length <= 255 || '255文字いないです'
   ]
 
-  const selectRules = (): validateFunc[] => [
-    v => !!v || '曜日を選択してください'
+  const selectTimeRules = (): validateFunc[] => [
+    v => !!v || '時間をきめてください'
   ]
 
   const datePickerRules = (): validateFunc[] => [
     v => !!v || '日付を選択してください'
   ]
-  return { textRules, passwordRules, selectRules, datePickerRules }
+  return { textRules, passwordRules, selectTimeRules, datePickerRules }
 }

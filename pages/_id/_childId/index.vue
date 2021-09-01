@@ -20,24 +20,39 @@
       <h3 class="font-weight-bold mb-2">今日は何かがあります</h3>
     </div>
     <!-- TODO: タイマーを設定してstoreに時間を保存 -->
-    <v-form class="d-flex justify-center align-stretch">
-      <p class="mr-5">もくひょう</p>
-      <v-select outlined :items="times" class="mr-5" />
-      <p class="mr-5">分</p>
+    <v-form class="ma-auto" style="width: 60%">
+      <div class="d-flex justify-center">
+        <p class="mr-5 pt-4">もくひょう</p>
+        <v-select
+          v-model="time"
+          outlined
+          class="mr-5"
+          :items="setTime"
+          :rules="rules.time"
+        />
+        <p class="mr-5 pt-4">分</p>
+      </div>
       <AppBtn btn-text="スタート！" @click="click" />
     </v-form>
     <!-- TODO: todoページへ遷移 -->
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from '@vue/composition-api'
+import { useTodoTimer } from '~/modules/useTodoTimer'
+import useValidationRules from '~/modules/useValidationRules'
 
-const times = [5, 10, 15, 20, 25]
 export default defineComponent({
   setup() {
+    const { setTime, time } = useTodoTimer()
+    const { selectTimeRules } = useValidationRules()
+    const rules = {
+      time: selectTimeRules()
+    }
+
     const click = () => {}
-    return { times, click }
+    return { time, setTime, click, rules }
   }
 })
 </script>
