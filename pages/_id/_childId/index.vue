@@ -20,7 +20,7 @@
       <h3 class="font-weight-bold mb-2">今日は何かがあります</h3>
     </div>
     <!-- TODO: タイマーを設定してstoreに時間を保存 -->
-    <v-form class="ma-auto" style="width: 60%">
+    <v-form ref="form" v-model="isValid" class="ma-auto" style="width: 60%">
       <div class="d-flex justify-center">
         <p class="mr-5 pt-4">もくひょう</p>
         <v-select
@@ -39,7 +39,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import {
+  defineComponent,
+  ref,
+  useRouter,
+  useRoute
+} from '@nuxtjs/composition-api'
 import { useTodoTimer } from '~/modules/useTodoTimer'
 import useValidationRules from '~/modules/useValidationRules'
 
@@ -50,9 +55,19 @@ export default defineComponent({
     const rules = {
       time: selectTimeRules()
     }
+    const isValid = ref(false)
+    const form = ref<HTMLFormElement | null>(null)
+    const router = useRouter()
+    const route = useRoute()
+    const parentId = route.value.params.id
+    const childId = route.value.params.childId
 
-    const click = () => {}
-    return { time, setTime, click, rules }
+    const click = () => {
+      form.value!.validate()
+      if (!isValid.value) return
+      router.push(`/${parentId}/${childId}/todo`)
+    }
+    return { time, setTime, click, rules, form, isValid }
   }
 })
 </script>

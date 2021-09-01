@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup() {
