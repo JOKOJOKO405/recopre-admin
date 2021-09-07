@@ -2,7 +2,7 @@
   <v-container class="pa-12 my-auto">
     <h1 class="text-center mb-10">
       <i class="mdi mdi-clock-time-four-outline primary--text" />
-      あと{{ time }}
+      あと{{ timer.min }}分{{ timer.sec }}
     </h1>
     <v-form class="todo-form-bottom">
       <div
@@ -25,7 +25,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from '@nuxtjs/composition-api'
+import {
+  defineComponent,
+  reactive,
+  useStore,
+  useFetch
+} from '@nuxtjs/composition-api'
+import { useTodoTimer } from '~/modules/useTodoTimer'
 
 export default defineComponent({
   setup() {
@@ -34,11 +40,14 @@ export default defineComponent({
       { text: 'はみがき', value: false },
       { text: '給食セット', value: false }
     ])
-    const time = '10分32秒'
+    const store = useStore()
+    const { convertTime } = useTodoTimer()
+    const time = store.getters['timer/time']
+    const timer = convertTime(time.value)
     const finishTodos = () => {
       // TODO: バリデーションチェック
     }
-    return { lists, time, finishTodos }
+    return { lists, timer, finishTodos }
   }
 })
 </script>

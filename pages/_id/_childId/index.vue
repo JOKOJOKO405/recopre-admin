@@ -43,7 +43,8 @@ import {
   defineComponent,
   ref,
   useRouter,
-  useRoute
+  useRoute,
+  useStore
 } from '@nuxtjs/composition-api'
 import { useTodoTimer } from '~/modules/useTodoTimer'
 import useValidationRules from '~/modules/useValidationRules'
@@ -61,10 +62,12 @@ export default defineComponent({
     const route = useRoute()
     const parentId = route.value.params.id
     const childId = route.value.params.childId
+    const store = useStore()
 
     const click = () => {
       form.value!.validate()
       if (!isValid.value) return
+      store.dispatch('timer/setTime', time)
       router.push(`/${parentId}/${childId}/todo`)
     }
     return { time, setTime, click, rules, form, isValid }
