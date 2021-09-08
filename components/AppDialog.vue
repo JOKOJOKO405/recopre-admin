@@ -1,12 +1,12 @@
 <template>
-  <v-dialog :value="isOpenedDialog">
+  <v-dialog :value="isOpenedDialog" width="50%">
     <v-card class="pa-3">
       <v-row no-gutters class="align-center">
         <v-card-title class="pa-3">
           {{ dialogTitle }}
         </v-card-title>
         <v-spacer />
-        <v-btn @click="$emit('click')" icon><v-icon>mdi-close</v-icon></v-btn>
+        <v-btn @click="$emit('close')" icon><v-icon>mdi-close</v-icon></v-btn>
       </v-row>
       <v-divider class="mb-6" />
       <v-card-text>

@@ -21,6 +21,16 @@
         @click="finishTodos"
       />
     </v-form>
+    <AppDialog
+      :is-opened-dialog="isOpenedNoticeDialog"
+      dialogTitle="おわってないタスクがあるよ！"
+      @close="closeDialog"
+    >
+      <span v-for="(task, index) in incompleteTask" :key="index">
+        {{ task }}
+      </span>
+      が終わってないよ！
+    </AppDialog>
   </v-container>
 </template>
 
@@ -29,12 +39,15 @@ import {
   defineComponent,
   reactive,
   useStore,
-  useFetch
+  useFetch,
+  ref,
+  computed
 } from '@nuxtjs/composition-api'
 import { useTodoTimer } from '~/modules/useTodoTimer'
 
 export default defineComponent({
   setup() {
+    // TODO: バックからとってくる
     const lists = reactive([
       { text: 'きがえ', value: false },
       { text: 'はみがき', value: false },
@@ -44,10 +57,30 @@ export default defineComponent({
     const { convertTime } = useTodoTimer()
     const time = store.getters['timer/time']
     const timer = convertTime(time.value)
-    const finishTodos = () => {
-      // TODO: バリデーションチェック
+
+    const isOpenedNoticeDialog = ref(false)
+
+    const closeDialog = () => {
+      isOpenedNoticeDialog.value = false
+      incompleteTask.value = []
     }
-    return { lists, timer, finishTodos }
+    const incompleteTask = ref<String[]>([])
+
+    const finishTodos = () => {
+      const incompletes = lists.filter(list => !list.value)
+      incompletes.forEach(incomplete =>
+        incompleteTask.value.push(incomplete.text)
+      )
+      isOpenedNoticeDialog.value = true
+    }
+    return {
+      lists,
+      timer,
+      finishTodos,
+      isOpenedNoticeDialog,
+      closeDialog,
+      incompleteTask
+    }
   }
 })
 </script>
