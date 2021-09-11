@@ -4,3 +4,8 @@ declare interface PokemonDatas {
   src: string
   rate?: number
 }
+
+declare interface Timer {
+  min: number
+  sec: number
+}

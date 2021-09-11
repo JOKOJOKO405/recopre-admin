@@ -2,7 +2,7 @@
   <v-container class="pa-12 my-auto">
     <h1 class="text-center mb-10">
       <i class="mdi mdi-clock-time-four-outline primary--text" />
-      あと{{ timer.min }}分{{ timer.sec }}
+      あと{{ countDownTimer }}
     </h1>
     <v-form class="todo-form-bottom">
       <div
@@ -41,7 +41,8 @@ import {
   useStore,
   useFetch,
   ref,
-  computed
+  computed,
+  onUnmounted
 } from '@nuxtjs/composition-api'
 import { useTodoTimer } from '~/modules/useTodoTimer'
 
@@ -54,9 +55,6 @@ export default defineComponent({
       { text: '給食セット', value: false }
     ])
     const store = useStore()
-    const { convertTime } = useTodoTimer()
-    const time = store.getters['timer/time']
-    const timer = convertTime(time.value)
 
     const isOpenedNoticeDialog = ref(false)
 
@@ -73,13 +71,29 @@ export default defineComponent({
       )
       isOpenedNoticeDialog.value = true
     }
+
+    /**
+     * init
+     */
+    const { formatTime, time, startCountDown, stopCountDown } = useTodoTimer()
+    const { $fetch } = useFetch(async () => {
+      time.value = store.getters['timer/time'].value
+      startCountDown()
+    })
+    const countDownTimer = computed(() => {
+      return formatTime(time.value!)
+    })
+
+    onUnmounted(() => {
+      stopCountDown()
+    })
     return {
       lists,
-      timer,
       finishTodos,
       isOpenedNoticeDialog,
       closeDialog,
-      incompleteTask
+      incompleteTask,
+      countDownTimer
     }
   }
 })

@@ -4,15 +4,27 @@ export const useTodoTimer = () => {
   const time = ref<number | null>(null)
   const setTime = [...Array(20).keys()].map(i => ++i)
 
-  const convertTime = (setTime: number) => {
-    console.debug('set', setTime)
-    const convertSec = setTime * 60
+  const formatTime = (time: number) => {
+    const convertSec = time * 60
     const min = Math.floor(convertSec / 60)
     const sec = convertSec % 60
-    return {
-      min,
-      sec
-    }
+    const putZero = (num: number) => ('00' + num).slice(-2)
+    return `${putZero(min)}分${putZero(sec)}秒`
   }
-  return { setTime, time, convertTime }
+
+  let timerIntervalId: NodeJS.Timer
+  const startCountDown = () => {
+    timerIntervalId = setInterval(() => {
+      time.value!--
+      if (time.value! <= 0) {
+        clearInterval(timerIntervalId)
+      }
+    }, 1000)
+  }
+
+  const stopCountDown = () => {
+    clearInterval(timerIntervalId)
+  }
+
+  return { setTime, time, formatTime, startCountDown, stopCountDown }
 }
