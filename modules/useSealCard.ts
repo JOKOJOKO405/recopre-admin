@@ -44,7 +44,13 @@ export const useSealCard = () => {
     }
   ]
 
+  const getPokemonSeal = () => {
+    return seals[Math.floor(Math.random() * seals.length)]
+  }
+
+  const praizeSeal = ref<PokemonDatas | null>(null)
+
   // TODO: 名前・id・拾った日・リンク
-  const pokemon = ref<PokemonDatas>()
-  return { seals, pokemon }
+  const pokemon = ref<PokemonDatas | null>(null)
+  return { seals, pokemon, praizeSeal, getPokemonSeal }
 }

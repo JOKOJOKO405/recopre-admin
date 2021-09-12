@@ -36,12 +36,20 @@
       が終わってないよ！
     </AppDialog>
     <AppDialog
+      v-if="praizeSeal"
       :is-opened-dialog="isOpenedSealDialog"
       dialogTitle="おつかれさま！"
       @close="closeDialog"
     >
-      <p>今回のシールは</p>
-      <p>{{}}だよ</p>
+      <p class="text-center mb-1">今回のシールは</p>
+      <p class="text-center">
+        <span class="font-weight-bold error--text text-h5">
+          {{ praizeSeal.name }}
+        </span>
+        <br />
+        だよ！
+      </p>
+      <v-img :src="praizeSeal.src" :alt="praizeSeal.name" />
     </AppDialog>
   </v-container>
 </template>
@@ -57,6 +65,7 @@ import {
   onUnmounted
 } from '@nuxtjs/composition-api'
 import { useTodoTimer } from '~/modules/useTodoTimer'
+import { useSealCard } from '~/modules/useSealCard'
 
 export default defineComponent({
   setup() {
@@ -78,6 +87,7 @@ export default defineComponent({
       incompleteTasks.value = []
     }
 
+    const { getPokemonSeal, praizeSeal } = useSealCard()
     const finishTodos = () => {
       const incompletes = lists.filter(list => !list.value)
       if (incompletes.length) {
@@ -87,6 +97,8 @@ export default defineComponent({
         isOpenedNoticeDialog.value = true
       } else {
         stopCountDown()
+        praizeSeal.value = getPokemonSeal()
+        // TODO: 集めたシールの枚数を増やすapi
         isOpenedSealDialog.value = true
       }
     }
@@ -113,7 +125,8 @@ export default defineComponent({
       closeDialog,
       incompleteTasks,
       countDownTimer,
-      isOpenedSealDialog
+      isOpenedSealDialog,
+      praizeSeal
     }
   }
 })
