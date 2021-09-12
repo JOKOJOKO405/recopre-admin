@@ -26,10 +26,22 @@
       dialogTitle="おわってないタスクがあるよ！"
       @close="closeDialog"
     >
-      <span v-for="(task, index) in incompleteTask" :key="index">
+      <span
+        v-for="(task, index) in incompleteTasks"
+        :key="index"
+        class="font-weight-bold error--text"
+      >
         {{ task }}
       </span>
       が終わってないよ！
+    </AppDialog>
+    <AppDialog
+      :is-opened-dialog="isOpenedSealDialog"
+      dialogTitle="おつかれさま！"
+      @close="closeDialog"
+    >
+      <p>今回のシールは</p>
+      <p>{{}}だよ</p>
     </AppDialog>
   </v-container>
 </template>
@@ -57,19 +69,26 @@ export default defineComponent({
     const store = useStore()
 
     const isOpenedNoticeDialog = ref(false)
+    const isOpenedSealDialog = ref(false)
+    const incompleteTasks = ref<String[]>([])
 
     const closeDialog = () => {
+      isOpenedSealDialog.value = false
       isOpenedNoticeDialog.value = false
-      incompleteTask.value = []
+      incompleteTasks.value = []
     }
-    const incompleteTask = ref<String[]>([])
 
     const finishTodos = () => {
       const incompletes = lists.filter(list => !list.value)
-      incompletes.forEach(incomplete =>
-        incompleteTask.value.push(incomplete.text)
-      )
-      isOpenedNoticeDialog.value = true
+      if (incompletes.length) {
+        incompletes.forEach(incomplete =>
+          incompleteTasks.value.push(incomplete.text)
+        )
+        isOpenedNoticeDialog.value = true
+      } else {
+        stopCountDown()
+        isOpenedSealDialog.value = true
+      }
     }
 
     /**
@@ -77,7 +96,7 @@ export default defineComponent({
      */
     const { formatTime, time, startCountDown, stopCountDown } = useTodoTimer()
     const { $fetch } = useFetch(async () => {
-      time.value = store.getters['timer/time'].value
+      time.value = store.getters['timer/time'].value * 60
       startCountDown()
     })
     const countDownTimer = computed(() => {
@@ -92,8 +111,9 @@ export default defineComponent({
       finishTodos,
       isOpenedNoticeDialog,
       closeDialog,
-      incompleteTask,
-      countDownTimer
+      incompleteTasks,
+      countDownTimer,
+      isOpenedSealDialog
     }
   }
 })
