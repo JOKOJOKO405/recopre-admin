@@ -9,11 +9,13 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/composition-api": "^0.24.4",
+    "@vue/apollo-composable": "^4.0.0-alpha.14",
     "core-js": "^3.9.1",
     "dotenv": "^10.0.0",
     "graphql-tag": "^2.12.5",
@@ -22,6 +24,9 @@
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.2.0",
+    "@graphql-codegen/introspection": "2.1.0",
+    "@graphql-codegen/typescript": "^2.2.2",
     "@nuxt/types": "^2.15.3",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^6.0.0",
