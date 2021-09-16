@@ -1,10 +1,11 @@
 overwrite: true
-schema: "https://record-preparation.hasura.app/v1/graphql"
+schema: "./graphql/scheme/**/*.graphql"
 documents: "src/**/*.graphql"
 generates:
-  src/generated/graphql.ts:
+  ./types/graphql/scheme.d.ts:
     plugins:
       - "typescript"
-  ./graphql.schema.json:
-    plugins:
-      - "introspection"
+  config:
+    declarationKind: interface
+    enumsAsTypes: true
+    nonOptionalTypename: true
