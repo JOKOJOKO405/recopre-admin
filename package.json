@@ -10,7 +10,7 @@
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js",
     "test": "jest --verbose",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "gen-types": "graphql-codegen --config codegen.js"
   },
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.1-rc.5",
@@ -26,9 +26,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "2.2.0",
-    "@graphql-codegen/introspection": "2.1.0",
     "@graphql-codegen/typescript": "^2.2.2",
-    "@graphql-codegen/typescript-operations": "2.1.4",
     "@nuxt/types": "^2.15.3",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^6.0.0",
