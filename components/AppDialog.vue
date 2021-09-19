@@ -9,8 +9,17 @@
         <v-btn @click="$emit('close')" icon><v-icon>mdi-close</v-icon></v-btn>
       </v-row>
       <v-divider class="mb-6" />
-      <div>
+      <div class="mb-6">
         <slot />
+      </div>
+      <div class="text-right">
+        <v-btn
+          depressed
+          color="primary"
+          class="font-weight-bold"
+          @click="$emit('close')"
+          >とじる</v-btn
+        >
       </div>
     </v-card>
   </v-dialog>

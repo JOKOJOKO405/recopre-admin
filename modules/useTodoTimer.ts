@@ -2,6 +2,7 @@ import { ref } from '@nuxtjs/composition-api'
 
 export const useTodoTimer = () => {
   const time = ref<number | null>(null)
+  const isDisabledSwitch = ref(false)
   const setTime = [...Array(20).keys()].map(i => ++i)
 
   const formatTime = (time: number) => {
@@ -25,5 +26,12 @@ export const useTodoTimer = () => {
     clearInterval(timerIntervalId)
   }
 
-  return { setTime, time, formatTime, startCountDown, stopCountDown }
+  return {
+    isDisabledSwitch,
+    setTime,
+    time,
+    formatTime,
+    startCountDown,
+    stopCountDown
+  }
 }

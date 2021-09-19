@@ -12,12 +12,13 @@
       >
         <p class="ma-0">{{ list.text }}</p>
         <p class="ma-0">
-          <v-switch inset v-model="list.value" />
+          <v-switch inset v-model="list.value" :disabled="isDisabledSwitch" />
         </p>
       </div>
       <AppBtn
         btn-text="おわった！"
         class="d-block mx-auto mt-10"
+        :disabled="isDisabledFinishBtn"
         @click="finishTodos"
       />
     </v-form>
@@ -79,6 +80,7 @@ export default defineComponent({
 
     const isOpenedNoticeDialog = ref(false)
     const isOpenedSealDialog = ref(false)
+    const isDisabledFinishBtn = ref(false)
     const incompleteTasks = ref<String[]>([])
 
     const closeDialog = () => {
@@ -97,6 +99,8 @@ export default defineComponent({
         isOpenedNoticeDialog.value = true
       } else {
         stopCountDown()
+        isDisabledSwitch.value = true
+        isDisabledFinishBtn.value = true
         praizeSeal.value = getPokemonSeal()
         // TODO: 集めたシールの枚数を増やすapi
         isOpenedSealDialog.value = true
@@ -106,7 +110,13 @@ export default defineComponent({
     /**
      * init
      */
-    const { formatTime, time, startCountDown, stopCountDown } = useTodoTimer()
+    const {
+      formatTime,
+      time,
+      startCountDown,
+      stopCountDown,
+      isDisabledSwitch
+    } = useTodoTimer()
     const { $fetch } = useFetch(async () => {
       time.value = store.getters['timer/time'].value * 60
       startCountDown()
@@ -126,7 +136,9 @@ export default defineComponent({
       incompleteTasks,
       countDownTimer,
       isOpenedSealDialog,
-      praizeSeal
+      praizeSeal,
+      isDisabledSwitch,
+      isDisabledFinishBtn
     }
   }
 })

@@ -8,6 +8,7 @@
     depressed
     large
     :block="block"
+    :disabled="disabled"
   >
     {{ btnText }}
   </v-btn>
@@ -27,6 +28,10 @@ export default defineComponent({
       default: false
     },
     block: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     }
