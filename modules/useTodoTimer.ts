@@ -1,5 +1,7 @@
 import { ref } from '@nuxtjs/composition-api'
 
+const weekStr = ['日', '月', '火', '水', '木', '金', '土']
+
 export const useTodoTimer = () => {
   const time = ref<number | null>(null)
   const isDisabledSwitch = ref(false)
@@ -37,6 +39,16 @@ export const useTodoTimer = () => {
     }
   }
 
+  const getDate = () => {
+    const month = new Date().getMonth() + 1
+    const date = new Date().getDate()
+    const day = weekStr[new Date().getDay()]
+
+    const isHoliday = day === weekStr[0] ? true : false
+
+    return { month, date, day, isHoliday }
+  }
+
   return {
     isDisabledSwitch,
     setTime,
@@ -44,6 +56,7 @@ export const useTodoTimer = () => {
     formatTime,
     startCountDown,
     stopCountDown,
-    getGreeting
+    getGreeting,
+    getDate
   }
 }

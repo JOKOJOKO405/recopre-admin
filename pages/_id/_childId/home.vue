@@ -1,7 +1,12 @@
 <template>
   <div class="d-flex align-center justify-center" style="height: 100%">
     <v-container id="page-top" class="text-center">
-      <h1 class="mb-8" style="white-space: break-spaces">{{ greetings }}</h1>
+      <h1 class="mb-8" style="white-space: break-spaces">
+        <template v-if="today.isHoliday"> 今日はお休みです </template>
+        <template v-else>
+          {{ greetings }}
+        </template>
+      </h1>
       <h2
         class="
           show-date
@@ -13,14 +18,20 @@
           rounded-pill
         "
       >
-        4月4日
+        {{ today.month }}月{{ today.date }}日（{{ today.day }}）
       </h2>
-      <div class="notice-list my-10">
+      <div v-if="!today.isHoliday" class="notice-list my-10">
         <!-- TODO: やること取得して表示 -->
         <h3 class="font-weight-bold mb-2">今日は何かがあります</h3>
         <h3 class="font-weight-bold mb-2">今日は何かがあります</h3>
       </div>
-      <v-form ref="form" v-model="isValid" class="ma-auto" style="width: 60%">
+      <v-form
+        v-if="!today.isHoliday"
+        ref="form"
+        v-model="isValid"
+        class="ma-auto"
+        style="width: 60%"
+      >
         <div class="d-flex justify-center">
           <p class="mr-5 pt-4">もくひょう</p>
           <v-select
@@ -52,7 +63,7 @@ import useValidationRules from '~/modules/useValidationRules'
 
 export default defineComponent({
   setup() {
-    const { setTime, time, getGreeting } = useTodoTimer()
+    const { setTime, time, getGreeting, getDate } = useTodoTimer()
     const { selectTimeRules } = useValidationRules()
     const rules = {
       time: selectTimeRules()
@@ -73,6 +84,7 @@ export default defineComponent({
     }
 
     const greetings = computed(() => getGreeting())
+    const today = computed(() => getDate())
 
     return {
       time,
@@ -81,7 +93,8 @@ export default defineComponent({
       rules,
       form,
       isValid,
-      greetings
+      greetings,
+      today
     }
   }
 })
