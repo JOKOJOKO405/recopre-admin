@@ -1,18 +1,18 @@
 <template>
   <v-bottom-navigation background-color="primary" color="primary" grow>
-    <v-btn>
+    <v-btn :to="`/${parentId}/${childId}/home`" nuxt>
       <span>ホーム</span>
       <v-icon class="nav-icon">mdi-home</v-icon>
     </v-btn>
-    <v-btn>
+    <v-btn :to="`/${parentId}/${childId}/todo`" nuxt>
       <span>やること</span>
       <v-icon class="nav-icon">mdi-pencil-outline</v-icon>
     </v-btn>
-    <v-btn>
+    <v-btn :to="`/${parentId}/${childId}/seal`" nuxt>
       <span>シール</span>
       <v-icon class="nav-icon">mdi-seal-variant</v-icon>
     </v-btn>
-    <v-btn>
+    <v-btn :to="`/${parentId}/${childId}/item`" nuxt>
       <span>持ち物</span>
       <v-icon class="nav-icon">mdi-bag-personal</v-icon>
     </v-btn>
@@ -20,9 +20,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, useRoute } from '@nuxtjs/composition-api'
 export default defineComponent({
-  name: 'BottomDrawer'
+  name: 'BottomDrawer',
+  setup() {
+    const route = useRoute()
+    const parentId = route.value.params.id
+    const childId = route.value.params.childId
+    return { parentId, childId }
+  }
 })
 </script>
 

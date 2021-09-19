@@ -26,12 +26,24 @@ export const useTodoTimer = () => {
     clearInterval(timerIntervalId)
   }
 
+  const getGreeting = () => {
+    const hours = new Date().getHours()
+    if (hours >= 6 && hours <= 8) {
+      return 'おはようございます🍞\n今日もがんばりましょう😊'
+    } else if (hours >= 13 && hours <= 18) {
+      return 'おかえりなさい🍰\n終わってからあそぼう🎮'
+    } else {
+      return 'こんばんは🌙\nねる前にチェックしよう✅'
+    }
+  }
+
   return {
     isDisabledSwitch,
     setTime,
     time,
     formatTime,
     startCountDown,
-    stopCountDown
+    stopCountDown,
+    getGreeting
   }
 }
