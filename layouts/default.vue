@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <AppBar />
     <v-main>
       <nuxt />
     </v-main>
