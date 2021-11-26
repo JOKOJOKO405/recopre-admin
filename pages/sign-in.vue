@@ -6,9 +6,9 @@
         <v-form ref="loginForm" v-model="isValid" lazy-validation>
           <v-text-field
             outlined
-            label="ID"
-            v-model="user.id"
-            :rules="rules.id"
+            label="Eメール"
+            v-model="user.email"
+            :rules="rules.email"
           />
           <v-text-field
             outlined
@@ -44,6 +44,7 @@ import {
   useRouter
 } from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
+import { signIn } from '@/modules/API/queries'
 export default defineComponent({
   layout: 'no-header',
   setup() {
@@ -51,16 +52,26 @@ export default defineComponent({
     const loginForm = ref<HTMLFormElement | null>(null)
     const isValid = ref(false)
     const user = reactive({
-      id: '',
+      email: '',
       password: ''
     })
     const { textRules, passwordRules } = useValidationRules()
     const rules = {
-      id: textRules(),
+      email: textRules(),
       password: passwordRules()
     }
-    const login = () => {
+    const login = async () => {
       if (!loginForm.value!.validate()) return
+      try {
+        const res = await signIn(user)
+        if (res) {
+          console.debug(res)
+        } else {
+          console.debug('error')
+        }
+      } catch (e) {
+        console.error(e)
+      }
     }
     const goToSignUp = () => {
       router.push('/sign-up')

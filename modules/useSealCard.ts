@@ -1,4 +1,4 @@
-import { ref, reactive } from '@nuxtjs/composition-api'
+import { ref } from '@nuxtjs/composition-api'
 
 export const useSealCard = () => {
   const seals = [

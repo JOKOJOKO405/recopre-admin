@@ -35,8 +35,19 @@ export default {
     '@nuxtjs/composition-api/module'
   ],
 
+  plugins: ['~/plugins/axios/index'],
+
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [],
+  modules: ['@nuxtjs/axios'],
+  axios: {
+    baseURL: 'http://localhost:8000',
+    credentials: true,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Access-Control-Allow-Origin': '*'
+    }
+    // proxy: true
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
