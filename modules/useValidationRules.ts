@@ -11,7 +11,7 @@ export default () => {
   // password
   const passwordRules = (): validateFunc[] => [
     (v: string) => !!v || '入力必須です',
-    (v: string) => v.length <= 255 || '255文字いないです'
+    (v: string) => v.length <= 255 || '255文字以内で入力してください'
   ]
 
   const selectTimeRules = (): validateFunc[] => [

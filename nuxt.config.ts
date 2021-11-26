@@ -36,19 +36,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/apollo'],
-  apollo: {
-    clientConfigs: {
-      default: {
-        httpEndpoint: process.env.GRAPHQL_ENDPOINT,
-        httpLinkOptions: {
-          headers: {
-            'X-Hasura-Admin-Secret': process.env.HASURA_ADMIN_SECRET
-          }
-        }
-      }
-    }
-  },
+  modules: [],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
