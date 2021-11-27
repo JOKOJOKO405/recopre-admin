@@ -1,5 +1,10 @@
 <template>
-  <v-dialog :value="isOpenedDialog" width="50%">
+  <v-dialog
+    :value="isOpenedDialog"
+    :fullscreen="fullscreen"
+    :transition="fullscreen ? 'dialog-bottom-transition' : ''"
+    width="50%"
+  >
     <v-card class="pa-4">
       <v-row no-gutters class="align-center">
         <v-card-title class="pa-3">
@@ -12,7 +17,7 @@
       <div class="mb-6">
         <slot />
       </div>
-      <div class="text-right">
+      <div v-if="!fullscreen" class="text-right">
         <v-btn
           depressed
           color="primary"
@@ -37,8 +42,18 @@ export default defineComponent({
     dialogTitle: {
       type: String,
       required: true
+    },
+    fullscreen: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {}
 })
 </script>
+
+<style scoped>
+.v-dialog--fullscreen > .v-card {
+  padding: 12px !important;
+}
+</style>

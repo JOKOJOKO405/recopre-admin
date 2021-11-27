@@ -17,25 +17,34 @@
     </div>
     <AppDialog
       :is-opened-dialog="isOpenedChildCreateDialog"
+      :fullscreen="true"
       @close="closeCreateChildDialog"
       dialog-title="お子様を登録"
     >
       <v-form ref="createChildForm">
-        <div class="ma-auto" style="width: 90%">
-          <v-text-field
-            outlined
-            label="名前"
-            v-model="child.name"
-            class="mb-2"
-          />
-          <v-select outlined label="学年" v-model="child.grade" class="mb-2" />
+        <div>
+          <div class="d-flex">
+            <v-text-field
+              outlined
+              label="名前"
+              v-model="child.name"
+              class="mb-2 pa-3"
+            />
+            <v-select
+              outlined
+              label="学年"
+              v-model="child.grade"
+              class="mb-2 pa-3"
+            />
+          </div>
           <v-select
             outlined
             multiple
+            chips
             label="やること"
             v-model="child.todos"
             :items="todos"
-            class="mb-2"
+            class="mb-2 pa-3"
             item-value="id"
             item-text="name"
           />
