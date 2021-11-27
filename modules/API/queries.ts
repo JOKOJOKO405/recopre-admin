@@ -18,3 +18,7 @@ export const signUp = async (val: SignUp) => {
 export const signIn = async (val: SignIn) => {
   return await axios.post('/api/auth/sign_in', val)
 }
+// todos
+export const getTodos = async () => {
+  return await axios.get('/api/todos')
+}
