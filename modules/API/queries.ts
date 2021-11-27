@@ -13,8 +13,8 @@ interface SignIn {
 }
 
 export const signUp = async (val: SignUp) => {
-  return await axios.post('/auth', val)
+  return await axios.post('/api/auth', val)
 }
 export const signIn = async (val: SignIn) => {
-  return await axios.post('/auth/sign_in', val)
+  return await axios.post('/api/auth/sign_in', val)
 }

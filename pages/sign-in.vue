@@ -64,8 +64,8 @@ export default defineComponent({
       if (!loginForm.value!.validate()) return
       try {
         const res = await signIn(user)
-        if (res) {
-          console.debug(res)
+        if (res.data) {
+          router.push(`/${res.data.data.id}`)
         } else {
           console.debug('error')
         }

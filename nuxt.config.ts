@@ -40,13 +40,14 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ['@nuxtjs/axios'],
   axios: {
-    baseURL: 'http://localhost:8000',
     credentials: true,
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-      'Access-Control-Allow-Origin': '*'
+    proxy: true
+  },
+  proxy: {
+    '/api/': {
+      target: 'http://localhost:8000',
+      pathRewrite: { '^/api/': '' }
     }
-    // proxy: true
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

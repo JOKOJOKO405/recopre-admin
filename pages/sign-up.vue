@@ -77,9 +77,16 @@ export default defineComponent({
       email: textRules(),
       password: passwordRules()
     }
-    const register = () => {
+    const register = async () => {
       if (!loginForm.value!.validate()) return
-      signUp(user)
+      try {
+        const res = await signUp(user)
+        if (res.data) {
+          router.push(`/${res.data.data.id}`)
+        }
+      } catch (e) {
+        console.error(e)
+      }
     }
     const goToLogin = () => {
       router.push('/sign-in')
