@@ -35,7 +35,7 @@ export default {
     '@nuxtjs/composition-api/module'
   ],
 
-  plugins: ['~/plugins/axios/index'],
+  plugins: ['~/plugins/axios/index', '~/plugins/localStorage'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ['@nuxtjs/axios'],

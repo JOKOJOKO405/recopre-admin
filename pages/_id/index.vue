@@ -65,13 +65,14 @@ import {
   defineComponent,
   ref,
   reactive,
-  useFetch
+  useFetch,
+  useStore
 } from '@nuxtjs/composition-api'
 import { getTodos, getGrades, getChildren } from '@/modules/API/queries'
 export default defineComponent({
   layout: 'no-header',
   setup() {
-    // TODO: APIで取得
+    const store = useStore()
     const hasChildren = ref(false)
     const todos = ref<Todos[]>([])
     const grades = ref<Grades[]>([])
@@ -101,10 +102,11 @@ export default defineComponent({
      * init
      */
     useFetch(async () => {
+      const headers = await store.getters['user/headers']
       const [resTodos, resGrades, resChildren]: any = await Promise.all([
         getTodos(),
         getGrades(),
-        getChildren()
+        getChildren(headers)
       ])
       console.debug(resTodos, resGrades)
       todos.value = resTodos.data

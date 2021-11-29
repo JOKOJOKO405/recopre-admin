@@ -41,13 +41,16 @@ import {
   defineComponent,
   ref,
   reactive,
-  useRouter
+  useRouter,
+  useStore
 } from '@nuxtjs/composition-api'
 import useValidationRules from '@/modules/useValidationRules'
+import { useUserAccessToken } from '@/modules/useAccessToken'
 import { signIn } from '@/modules/API/queries'
 export default defineComponent({
   layout: 'no-header',
   setup() {
+    const store = useStore()
     const router = useRouter()
     const loginForm = ref<HTMLFormElement | null>(null)
     const isValid = ref(false)
@@ -60,11 +63,14 @@ export default defineComponent({
       email: textRules(),
       password: passwordRules()
     }
+    const { headers, initHeaders, setHeaderData } = useUserAccessToken()
     const login = async () => {
       if (!loginForm.value!.validate()) return
       try {
         const res = await signIn(user)
         if (res.data) {
+          setHeaderData(res.headers)
+          store.dispatch('user/setUser', headers)
           router.push(`/${res.data.data.id}`)
         } else {
           console.debug('error')

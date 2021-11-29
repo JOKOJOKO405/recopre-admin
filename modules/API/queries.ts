@@ -19,8 +19,9 @@ export const signIn = async (val: SignIn) => {
   return await axios.post('/api/auth/sign_in', val)
 }
 // children
-export const getChildren = async () => {
-  return await axios.get('/api/children')
+export const getChildren = async (token: any) => {
+  console.debug('token', { headers: token })
+  return await axios.get('/api/children', { headers: token })
 }
 // todos
 export const getTodos = async () => {
