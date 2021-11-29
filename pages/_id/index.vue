@@ -35,6 +35,9 @@
               label="学年"
               v-model="child.grade"
               class="mb-2 pa-3"
+              :items="grades"
+              item-value="id"
+              item-text="grade"
             />
           </div>
           <v-select
@@ -64,13 +67,16 @@ import {
   reactive,
   useFetch
 } from '@nuxtjs/composition-api'
-import { getTodos } from '@/modules/API/queries'
+import { getTodos, getGrades, getChildren } from '@/modules/API/queries'
 export default defineComponent({
   layout: 'no-header',
   setup() {
     // TODO: APIで取得
     const hasChildren = ref(false)
     const todos = ref<Todos[]>([])
+    const grades = ref<Grades[]>([])
+    // FIXME: 型つくる
+    const children = ref<any[]>([])
     const isOpenedChildCreateDialog = ref(false)
     const createChildForm = ref<HTMLFormElement | null>(null)
     const child = reactive({
@@ -95,8 +101,15 @@ export default defineComponent({
      * init
      */
     useFetch(async () => {
-      const res = await getTodos()
-      todos.value = res.data
+      const [resTodos, resGrades, resChildren]: any = await Promise.all([
+        getTodos(),
+        getGrades(),
+        getChildren()
+      ])
+      console.debug(resTodos, resGrades)
+      todos.value = resTodos.data
+      grades.value = resGrades.data
+      children.value = resChildren.data
     })
     return {
       hasChildren,
@@ -106,6 +119,7 @@ export default defineComponent({
       createChildForm,
       child,
       todos,
+      grades,
       createChild
     }
   }

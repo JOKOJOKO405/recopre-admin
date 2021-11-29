@@ -15,3 +15,8 @@ declare interface Todos {
   name: string
   created_at: string
 }
+declare interface Grades {
+  id: number
+  grades: string
+  created_at: string
+}
