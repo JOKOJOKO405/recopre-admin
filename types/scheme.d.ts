@@ -1,6 +1,7 @@
 declare interface Seal {
   id: number
   name: string
+  kana: string
   src: string
   rate: number
   description: string
