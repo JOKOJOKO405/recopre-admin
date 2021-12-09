@@ -1,8 +1,9 @@
-declare interface PokemonDatas {
-  id?: number
+declare interface Seal {
+  id: number
   name: string
   src: string
-  rate?: number
+  rate: number
+  description: string
 }
 
 declare interface Timer {

@@ -70,7 +70,7 @@ import { useSealCard } from '~/modules/useSealCard'
 
 export default defineComponent({
   setup() {
-    // TODO: バックからとってくる
+    // TODO: バックからとってくるまたはprops
     const lists = reactive([
       { text: 'きがえ', value: false },
       { text: 'はみがき', value: false },
@@ -89,7 +89,7 @@ export default defineComponent({
       incompleteTasks.value = []
     }
 
-    const { getPokemonSeal, praizeSeal } = useSealCard()
+    const { getSeal, praizeSeal } = useSealCard()
     const finishTodos = () => {
       const incompletes = lists.filter(list => !list.value)
       if (incompletes.length) {
@@ -101,8 +101,7 @@ export default defineComponent({
         stopCountDown()
         isDisabledSwitch.value = true
         isDisabledFinishBtn.value = true
-        praizeSeal.value = getPokemonSeal()
-        // TODO: 集めたシールの枚数を増やすapi
+        // praizeSeal.value = getSeal()
         isOpenedSealDialog.value = true
       }
     }
@@ -118,6 +117,7 @@ export default defineComponent({
       isDisabledSwitch
     } = useTodoTimer()
     const { $fetch } = useFetch(async () => {
+      // TODO シール取得API
       time.value = store.getters['timer/time'].value * 60
       startCountDown()
     })

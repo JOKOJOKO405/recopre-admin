@@ -14,21 +14,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@nuxtjs/composition-api'
-import { useSealCard } from '../../../modules/useSealCard'
+import { defineComponent, ref, useFetch } from '@nuxtjs/composition-api'
 export default defineComponent({
   setup() {
-    const { seals, pokemon } = useSealCard()
     const isOpenSealDialog = ref(false)
 
     const showSealDetail = (index: number) => {
       isOpenSealDialog.value = true
-      pokemon.value = seals[index]
     }
     const closeDialog = () => {
       isOpenSealDialog.value = false
     }
-    return { seals, showSealDetail, isOpenSealDialog, closeDialog, pokemon }
+    useFetch(async () => {
+      // TODO: バックからシールデータとってくるまたはprops
+    })
+    return { showSealDetail, isOpenSealDialog, closeDialog }
   }
 })
 </script>
