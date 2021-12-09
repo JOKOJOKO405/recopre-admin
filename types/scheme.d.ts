@@ -5,6 +5,7 @@ declare interface Seal {
   src: string
   rate: number
   description: string
+  created_at: string
 }
 
 declare interface Timer {

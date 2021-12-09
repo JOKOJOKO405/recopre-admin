@@ -42,15 +42,19 @@
       dialogTitle="おつかれさま！"
       @close="closeDialog"
     >
-      <p class="text-center mb-1">今回のシールは</p>
-      <p class="text-center">
-        <span class="font-weight-bold error--text text-h5">
+      <p class="text-center mb-1">今回のシールは…</p>
+      <p class="text-center mb-0">
+        <span class="font-weight-bold error--text d-block text-h5">
           {{ praizeSeal.name }}
         </span>
+        <span class="error--text">{{ praizeSeal.kana }}</span>
         <br />
-        だよ！
       </p>
-      <v-img :src="praizeSeal.src" :alt="praizeSeal.name" />
+      <v-img
+        :src="require(`@/assets/images/seals/${praizeSeal.src}.jpg`)"
+        :alt="praizeSeal.name"
+      />
+      <p class="mt-4">{{ praizeSeal.description }}</p>
     </AppDialog>
   </v-container>
 </template>
@@ -67,6 +71,7 @@ import {
 } from '@nuxtjs/composition-api'
 import { useTodoTimer } from '~/modules/useTodoTimer'
 import { useSealCard } from '~/modules/useSealCard'
+import { getAllSeals } from '~/modules/API/queries'
 
 export default defineComponent({
   setup() {
@@ -77,6 +82,8 @@ export default defineComponent({
       { text: '給食セット', value: false }
     ])
     const store = useStore()
+    // シール
+    const seals = ref<Seal[] | null>([])
 
     const isOpenedNoticeDialog = ref(false)
     const isOpenedSealDialog = ref(false)
@@ -101,7 +108,6 @@ export default defineComponent({
         stopCountDown()
         isDisabledSwitch.value = true
         isDisabledFinishBtn.value = true
-        // praizeSeal.value = getSeal()
         isOpenedSealDialog.value = true
       }
     }
@@ -118,6 +124,8 @@ export default defineComponent({
     } = useTodoTimer()
     const { $fetch } = useFetch(async () => {
       // TODO シール取得API
+      seals.value = await getAllSeals()
+      praizeSeal.value = getSeal(seals.value!)
       time.value = store.getters['timer/time'].value * 60
       startCountDown()
     })

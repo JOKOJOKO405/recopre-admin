@@ -31,3 +31,8 @@ export const getTodos = async () => {
 export const getGrades = async () => {
   return await axios.get('/api/grades')
 }
+// seals
+export const getAllSeals = async () => {
+  const seal = await axios.get('/api/seals')
+  return seal.data
+}
