@@ -108,7 +108,7 @@ export default defineComponent({
         getGrades(),
         getChildren(headers)
       ])
-      console.debug(resTodos, resGrades)
+      console.debug(resTodos, resGrades, resChildren)
       todos.value = resTodos.data
       grades.value = resGrades.data
       children.value = resChildren.data
