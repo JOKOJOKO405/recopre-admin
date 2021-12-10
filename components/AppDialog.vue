@@ -23,7 +23,7 @@
           color="primary"
           class="font-weight-bold"
           @click="$emit('close')"
-          >とじる</v-btn
+          >OK</v-btn
         >
       </div>
     </v-card>

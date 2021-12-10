@@ -7,56 +7,19 @@
       <div>
         <h1 class="mb-6">お子様を選択</h1>
         <div class="text-center">
-          <template v-if="hasChildren"> </template>
+          <template v-if="children.length">
+            {{ children }}
+          </template>
           <template v-else>
             <h3 class="gray600--text mb-3">まだ登録がありません</h3>
-            <AppBtn btn-text="お子様を登録" @click="openChildCreateDialog" />
+            <AppBtn
+              btn-text="お子様を登録"
+              @click="$router.push(`${userId}/register`)"
+            />
           </template>
         </div>
       </div>
     </div>
-    <AppDialog
-      :is-opened-dialog="isOpenedChildCreateDialog"
-      :fullscreen="true"
-      @close="closeCreateChildDialog"
-      dialog-title="お子様を登録"
-    >
-      <v-form ref="createChildForm">
-        <div>
-          <div class="d-flex">
-            <v-text-field
-              outlined
-              label="名前"
-              v-model="child.name"
-              class="mb-2 pa-3"
-            />
-            <v-select
-              outlined
-              label="学年"
-              v-model="child.grade"
-              class="mb-2 pa-3"
-              :items="grades"
-              item-value="id"
-              item-text="grade"
-            />
-          </div>
-          <v-select
-            outlined
-            multiple
-            chips
-            label="やること"
-            v-model="child.todos"
-            :items="todos"
-            class="mb-2 pa-3"
-            item-value="id"
-            item-text="name"
-          />
-        </div>
-        <div class="text-center">
-          <AppBtn @click="createChild" :btn-text="'登録する'" />
-        </div>
-      </v-form>
-    </AppDialog>
   </div>
 </template>
 
@@ -64,65 +27,33 @@
 import {
   defineComponent,
   ref,
-  reactive,
   useFetch,
-  useStore
+  useStore,
+  useRoute
 } from '@nuxtjs/composition-api'
-import { getTodos, getGrades, getChildren } from '@/modules/API/queries'
+import { getChildren } from '@/modules/API/queries'
 export default defineComponent({
   layout: 'no-header',
   setup() {
     const store = useStore()
-    const hasChildren = ref(false)
-    const todos = ref<Todos[]>([])
-    const grades = ref<Grades[]>([])
+    const route = useRoute()
+    const userId = ref<number>(0)
+
     // FIXME: 型つくる
     const children = ref<any[]>([])
-    const isOpenedChildCreateDialog = ref(false)
-    const createChildForm = ref<HTMLFormElement | null>(null)
-    const child = reactive({
-      name: '',
-      grade: 0,
-      todos: [],
-      icon: 0
-    })
-
-    const createChild = () => {
-      console.debug(child)
-    }
-
-    const openChildCreateDialog = () => {
-      isOpenedChildCreateDialog.value = true
-    }
-    const closeCreateChildDialog = () => {
-      isOpenedChildCreateDialog.value = false
-    }
 
     /**
      * init
      */
     useFetch(async () => {
       const headers = await store.getters['user/headers']
-      const [resTodos, resGrades, resChildren]: any = await Promise.all([
-        getTodos(),
-        getGrades(),
-        getChildren(headers)
-      ])
-      console.debug(resTodos, resGrades, resChildren)
-      todos.value = resTodos.data
-      grades.value = resGrades.data
+      const resChildren = await getChildren(headers)
       children.value = resChildren.data
+      userId.value = parseInt(route.value.params.id)
     })
     return {
-      hasChildren,
-      isOpenedChildCreateDialog,
-      openChildCreateDialog,
-      closeCreateChildDialog,
-      createChildForm,
-      child,
-      todos,
-      grades,
-      createChild
+      children,
+      userId
     }
   }
 })

@@ -16,7 +16,13 @@ declare interface Timer {
 declare interface Todos {
   id: number
   name: string
+  timezone: 'morning' | 'afternoon' | 'evening'
   created_at: string
+}
+declare interface DivideTodos {
+  morning: Todos[]
+  afternoon: Todos[]
+  evening: Todos[]
 }
 declare interface Grades {
   id: number

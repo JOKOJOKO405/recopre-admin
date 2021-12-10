@@ -20,7 +20,6 @@ export const signIn = async (val: SignIn) => {
 }
 // children
 export const getChildren = async (token: any) => {
-  console.debug('token', { headers: token })
   return await axios.get('/api/children', { headers: token })
 }
 // todos
