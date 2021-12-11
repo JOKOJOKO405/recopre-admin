@@ -21,87 +21,12 @@
           <h2 class="mb-4 text-h5 font-weight-bold">やること登録・編集</h2>
           <AppBtn btn-text="登録" @click="openDialog" />
         </div>
-        <v-simple-table>
-          <thead>
-            <tr>
-              <th class="text-left">朝</th>
-              <th class="text-left">午後</th>
-              <th class="text-left">夜</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="!commonTodos">
-              <td colspan="3" class="text-center">まだ登録はありません</td>
-            </tr>
-            <tr v-else>
-              <td class="td pa-4">
-                <div
-                  v-for="item in commonTodos.morning"
-                  :key="item.id"
-                  class="d-flex justify-space-between mb-2"
-                >
-                  <div>
-                    {{ item.name }}
-                  </div>
-                  <div>
-                    <i
-                      class="
-                        text-body-1
-                        mdi mdi-pencil
-                        d-inline
-                        mr-2
-                        primary--text
-                      "
-                    />
-                    <i class="text-body-1 mdi mdi-delete error--text" />
-                  </div>
-                </div>
-              </td>
-              <td class="td pa-4">
-                <div
-                  v-for="item in commonTodos.afternoon"
-                  :key="item.id"
-                  class="d-flex justify-space-between mb-2"
-                >
-                  <div>{{ item.name }}</div>
-                  <div>
-                    <i
-                      class="
-                        text-body-1
-                        mdi mdi-pencil
-                        d-inline
-                        mr-2
-                        primary--text
-                      "
-                    />
-                    <i class="text-body-1 mdi mdi-delete error--text" />
-                  </div>
-                </div>
-              </td>
-              <td class="td pa-4">
-                <div
-                  v-for="item in commonTodos.evening"
-                  :key="item.id"
-                  class="d-flex justify-space-between mb-2"
-                >
-                  <div>{{ item.name }}</div>
-                  <div>
-                    <i
-                      class="
-                        text-body-1
-                        mdi mdi-pencil
-                        d-inline
-                        mr-2
-                        primary--text
-                      "
-                    />
-                    <i class="text-body-1 mdi mdi-delete error--text" />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </v-simple-table>
+        <CreateCommonTodoTable
+          :common-todos="commonTodos"
+          :timezones="timezones"
+          @update="openDialogForEdit"
+          @delete="deleteTodo"
+        />
       </div>
     </div>
     <AppDialog
@@ -109,7 +34,7 @@
       dialog-title="やること登録"
       btn-text="登録"
       @close="closeDialog"
-      @click="createCommonTodos"
+      @click="registTodos(commonTodoInput)"
     >
       <v-text-field v-model="commonTodoInput.name" label="やること" outlined />
       <v-text-field
@@ -118,6 +43,7 @@
         outlined
       />
       <v-select
+        v-if="!isEditable"
         v-model="commonTodoInput.timezone"
         outlined
         :items="timezones"
@@ -127,6 +53,11 @@
 </template>
 
 <script lang="ts">
+const timezones = [
+  { text: '朝', value: 'morning' },
+  { text: '午後', value: 'afternoon' },
+  { text: '夜', value: 'evening' }
+]
 import {
   defineComponent,
   ref,
@@ -135,14 +66,14 @@ import {
   useStore,
   useRoute
 } from '@nuxtjs/composition-api'
-import { getChildren, getTodos, createTodos } from '@/modules/API/queries'
+import {
+  getChildren,
+  getTodos,
+  createTodos,
+  updateTodos,
+  deleteTodos
+} from '@/modules/API/queries'
 import { filteredTodosTimezone } from '~/modules/filter'
-
-const timezones = [
-  { text: '朝', value: 'morning' },
-  { text: '午後', value: 'afternoon' },
-  { text: '夜', value: 'evening' }
-]
 
 export default defineComponent({
   layout: 'no-header',
@@ -176,6 +107,10 @@ export default defineComponent({
     /**
      * todo
      */
+    const isEditable = ref(false)
+    const registTodos = (todo: Todos) => {
+      isEditable.value ? updateTodo(todo.id) : createCommonTodos()
+    }
     const createCommonTodos = async () => {
       try {
         console.debug(commonTodoInput)
@@ -183,6 +118,28 @@ export default defineComponent({
         Object.assign(commonTodoInput, initTodosInput())
         closeDialog()
         fetch()
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    const openDialogForEdit = (item: Todos) => {
+      isEditable.value = true
+      Object.assign(commonTodoInput, item)
+      isOpenedDialog.value = true
+    }
+    const updateTodo = async (id: number) => {
+      try {
+        await updateTodos(id, commonTodoInput)
+        Object.assign(commonTodoInput, initTodosInput())
+        closeDialog()
+        fetch()
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    const deleteTodo = async (id: number) => {
+      try {
+        await deleteTodos(id)
       } catch (error) {
         console.error(error)
       }
@@ -209,15 +166,14 @@ export default defineComponent({
       isOpenedDialog,
       openDialog,
       closeDialog,
+      commonTodoInput,
       timezones,
-      commonTodoInput
+      updateTodo,
+      deleteTodo,
+      openDialogForEdit,
+      isEditable,
+      registTodos
     }
   }
 })
 </script>
-
-<style scoped>
->>> .td {
-  vertical-align: top;
-}
-</style>

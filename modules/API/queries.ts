@@ -44,6 +44,12 @@ export const getTodos = async () => {
 export const createTodos = async (data: TodoInput) => {
   return await axios.post('/api/todos', data)
 }
+export const updateTodos = async (id: number, data: TodoInput) => {
+  return await axios.put(`/api/todos/${id}`, data)
+}
+export const deleteTodos = async (id: number) => {
+  return await axios.delete(`/api/todos/${id}`)
+}
 
 // grades
 export const getGrades = async () => {
