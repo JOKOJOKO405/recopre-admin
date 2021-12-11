@@ -15,25 +15,8 @@
         />
         <i
           class="text-body-1 mdi mdi-delete error--text"
-          @click="confirmToDelete"
+          @click="$emit('delete', item.id)"
         />
-        <v-scroll-x-transition>
-          <span
-            v-if="isDeletable"
-            class="
-              px-2
-              py-1
-              error
-              white--text
-              text-overline
-              font-weight-bold
-              rounded
-            "
-            @click="$emit('delete', item.id)"
-          >
-            削除
-          </span>
-        </v-scroll-x-transition>
       </div>
     </div>
   </div>
@@ -50,11 +33,7 @@ export default defineComponent({
     }
   },
   setup() {
-    const isDeletable = ref(false)
-    const confirmToDelete = () => {
-      isDeletable.value = !isDeletable.value
-    }
-    return { isDeletable, confirmToDelete }
+    return {}
   }
 })
 </script>

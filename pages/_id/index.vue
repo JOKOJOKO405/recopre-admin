@@ -25,10 +25,11 @@
           :common-todos="commonTodos"
           :timezones="timezones"
           @update="openDialogForEdit"
-          @delete="deleteTodo"
+          @delete="openDeleteTodoDialog"
         />
       </div>
     </div>
+    <!-- 登録・編集ダイアログ -->
     <AppDialog
       :is-opened-dialog="isOpenedDialog"
       dialog-title="やること登録"
@@ -48,6 +49,16 @@
         outlined
         :items="timezones"
       />
+    </AppDialog>
+    <!-- 削除ダイアログ -->
+    <AppDialog
+      dialog-title="削除確認"
+      btn-text="削除"
+      :is-opened-dialog="isOpenedDeleteDialog"
+      @close="closeDeleteTodoDialog"
+      @click="deleteTodo"
+    >
+      この項目を削除しますか？
     </AppDialog>
   </div>
 </template>
@@ -98,6 +109,7 @@ export default defineComponent({
     })
 
     const isOpenedDialog = ref(false)
+    const isOpenedDeleteDialog = ref(false)
     const openDialog = () => {
       isOpenedDialog.value = true
     }
@@ -127,6 +139,14 @@ export default defineComponent({
       Object.assign(commonTodoInput, item)
       isOpenedDialog.value = true
     }
+    const closeDeleteTodoDialog = () => {
+      isOpenedDeleteDialog.value = false
+    }
+    const deleteTodoId = ref(0)
+    const openDeleteTodoDialog = (id: number) => {
+      deleteTodoId.value = id
+      isOpenedDeleteDialog.value = true
+    }
     const updateTodo = async (id: number) => {
       try {
         await updateTodos(id, commonTodoInput)
@@ -137,9 +157,12 @@ export default defineComponent({
         console.error(error)
       }
     }
-    const deleteTodo = async (id: number) => {
+    const deleteTodo = async () => {
       try {
-        await deleteTodos(id)
+        await deleteTodos(deleteTodoId.value)
+        deleteTodoId.value = 0
+        closeDeleteTodoDialog()
+        fetch()
       } catch (error) {
         console.error(error)
       }
@@ -164,8 +187,11 @@ export default defineComponent({
       userId,
       createCommonTodos,
       isOpenedDialog,
+      isOpenedDeleteDialog,
       openDialog,
       closeDialog,
+      openDeleteTodoDialog,
+      closeDeleteTodoDialog,
       commonTodoInput,
       timezones,
       updateTodo,

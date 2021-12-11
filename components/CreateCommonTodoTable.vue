@@ -58,7 +58,7 @@ export default defineComponent({
       emit('update', item)
     }
     const deleteTodo = (id: number) => {
-      emit('update', id)
+      emit('delete', id)
     }
     return { updateTodo, deleteTodo }
   }
