@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <AppBar />
-    <v-main>
+    <v-main style="background: #f3f8ff">
       <nuxt />
     </v-main>
     <BottomDrawer />

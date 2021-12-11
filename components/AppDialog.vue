@@ -22,9 +22,10 @@
           depressed
           color="primary"
           class="font-weight-bold"
-          @click="$emit('close')"
-          >OK</v-btn
+          @click="$emit('click')"
         >
+          {{ btnText }}
+        </v-btn>
       </div>
     </v-card>
   </v-dialog>
@@ -46,6 +47,10 @@ export default defineComponent({
     fullscreen: {
       type: Boolean,
       default: false
+    },
+    btnText: {
+      type: String,
+      default: 'OK'
     }
   },
   setup(props) {}

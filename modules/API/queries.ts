@@ -11,6 +11,17 @@ interface SignIn {
   email: string
   password: string
 }
+interface TodoInput {
+  name: string
+  kana: string
+  timezone: string
+}
+
+interface ChildCreateInput {
+  name: string
+  grade: number
+  icon: string
+}
 
 export const signUp = async (val: SignUp) => {
   return await axios.post('/api/auth', val)
@@ -22,16 +33,30 @@ export const signIn = async (val: SignIn) => {
 export const getChildren = async (token: any) => {
   return await axios.get('/api/children', { headers: token })
 }
+export const createChild = async (data: ChildCreateInput) => {
+  return await axios.post('/api/children', data)
+}
+
 // todos
 export const getTodos = async () => {
   return await axios.get('/api/todos')
 }
+export const createTodos = async (data: TodoInput) => {
+  return await axios.post('/api/todos', data)
+}
+
 // grades
 export const getGrades = async () => {
   return await axios.get('/api/grades')
 }
+
 // seals
 export const getAllSeals = async () => {
   const seal = await axios.get('/api/seals')
   return seal.data
+}
+
+// child_todos
+export const createChildTodos = async (id: number, todo: TodoInput) => {
+  return await axios.post(`/api/children/${id}/todos`, todo)
 }

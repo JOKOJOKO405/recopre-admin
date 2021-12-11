@@ -26,6 +26,7 @@
       :is-opened-dialog="isOpenedNoticeDialog"
       dialogTitle="おわってないタスクがあるよ！"
       @close="closeDialog"
+      @click="closeDialog"
     >
       <span
         v-for="(task, index) in incompleteTasks"
@@ -41,6 +42,7 @@
       :is-opened-dialog="isOpenedSealDialog"
       dialogTitle="おつかれさま！"
       @close="closeDialog"
+      @click="closeDialog"
     >
       <p class="text-center mb-1">今回のシールは…</p>
       <p class="text-center mb-0">

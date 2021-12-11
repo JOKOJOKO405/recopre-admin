@@ -13,10 +13,11 @@ declare interface Timer {
   sec: number
 }
 
+declare type Timezone = 'morning' | 'afternoon' | 'evening'
 declare interface Todos {
   id: number
   name: string
-  timezone: 'morning' | 'afternoon' | 'evening'
+  timezone: Timezone
   created_at: string
 }
 declare interface DivideTodos {
