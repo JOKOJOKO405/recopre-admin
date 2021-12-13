@@ -64,7 +64,8 @@ export default {
           warning: colors.amber.base,
           error: '#DB221B',
           success: colors.green.accent3,
-          gray600: '#A8A8A8'
+          gray600: '#A8A8A8',
+          font: '#484848'
         }
       }
     }

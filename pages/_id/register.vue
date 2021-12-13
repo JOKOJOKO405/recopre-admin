@@ -37,6 +37,23 @@
                   item-text="grade"
                 />
               </div>
+              <div class="select-icon">
+                <h3 class="text-h6 font-weight-bold font--text">
+                  アイコンを選択
+                </h3>
+                <v-radio-group v-model="child.icon">
+                  <v-radio
+                    v-for="avatar in avatars"
+                    :key="avatar.id"
+                    :label="avatar.name"
+                    :value="avatar.id"
+                  >
+                    <v-img
+                      :src="require(`@/assets/images/icons/${avatar.src}`)"
+                    />
+                  </v-radio>
+                </v-radio-group>
+              </div>
               <div class="text-right">
                 <AppBtn
                   @click="$router.go(-1)"
@@ -194,6 +211,17 @@ import {
 import { getTodos, getGrades, createChild } from '@/modules/API/queries'
 import { filteredTodosTimezone } from '~/modules/filter'
 
+const avatars = [
+  { id: 0, name: '男の子1', src: 'boy01.png' },
+  { id: 1, name: '男の子2', src: 'boy02.png' },
+  { id: 2, name: '男の子3', src: 'boy03.png' },
+  { id: 3, name: '男の子4', src: 'boy04.png' },
+  { id: 4, name: '女の子1', src: 'girl01.png' },
+  { id: 5, name: '女の子2', src: 'girl02.png' },
+  { id: 6, name: '女の子3', src: 'girl03.png' },
+  { id: 7, name: '女の子4', src: 'girl04.png' }
+]
+
 export default defineComponent({
   layout: 'no-header',
   setup() {
@@ -268,7 +296,8 @@ export default defineComponent({
       timezone,
       stepperEl,
       updateChild,
-      updateChildTodosForm
+      updateChildTodosForm,
+      avatars
     }
   }
 })
