@@ -41,18 +41,27 @@
                 <h3 class="text-h6 font-weight-bold font--text">
                   アイコンを選択
                 </h3>
-                <v-radio-group v-model="child.icon">
-                  <v-radio
+                <div class="d-flex justify-space-around">
+                  <div
                     v-for="avatar in avatars"
                     :key="avatar.id"
-                    :label="avatar.name"
-                    :value="avatar.id"
+                    class="text-center"
                   >
-                    <v-img
-                      :src="require(`@/assets/images/icons/${avatar.src}`)"
-                    />
-                  </v-radio>
-                </v-radio-group>
+                    <label>
+                      <input
+                        type="radio"
+                        v-model="child.icon"
+                        :name="avatar.name"
+                        :value="avatar.id"
+                      />
+                      <br />
+                      <img
+                        width="40"
+                        :src="require(`@/assets/images/icons/${avatar.src}`)"
+                      />
+                    </label>
+                  </div>
+                </div>
               </div>
               <div class="text-right">
                 <AppBtn
@@ -61,7 +70,7 @@
                   :isOutlined="true"
                   class="mr-3"
                 />
-                <AppBtn @click="createChild" :btn-text="'登録する'" />
+                <AppBtn @click="registerChild" :btn-text="'登録する'" />
               </div>
             </v-form>
           </v-stepper-content>
@@ -206,11 +215,12 @@ import {
   defineComponent,
   ref,
   reactive,
-  useFetch
+  useFetch,
+  useStore
 } from '@nuxtjs/composition-api'
 import { getTodos, getGrades, createChild } from '@/modules/API/queries'
 import { filteredTodosTimezone } from '~/modules/filter'
-
+// TODO 切り出し
 const avatars = [
   { id: 0, name: '男の子1', src: 'boy01.png' },
   { id: 1, name: '男の子2', src: 'boy02.png' },
@@ -225,6 +235,7 @@ const avatars = [
 export default defineComponent({
   layout: 'no-header',
   setup() {
+    const store = useStore()
     const createChildForm = ref<HTMLFormElement | null>(null)
     const updateChildTodosForm = ref<HTMLFormElement | null>(null)
     const child = reactive({
@@ -250,9 +261,14 @@ export default defineComponent({
     const stepperEl = ref<number>(1)
     const timezoneTodos = ref<Todos | null>(null)
     const timezone = ref<Timezone | null>(null)
-    const createChild = () => {
-      console.debug(child)
-      stepperEl.value = 2
+    const registerChild = async () => {
+      try {
+        const headers = await store.getters['user/headers']
+        // if (!headers) return
+        const childData = await createChild(child, headers)
+        console.debug('childData', childData)
+        stepperEl.value = 2
+      } catch (error) {}
     }
     const updateChild = () => {
       console.debug(child)
@@ -286,7 +302,7 @@ export default defineComponent({
       child,
       childTodos,
       childItems,
-      createChild,
+      registerChild,
       todos,
       grades,
       isOpenedDialog,

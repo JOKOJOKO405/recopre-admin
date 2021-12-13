@@ -30,3 +30,9 @@ declare interface Grades {
   grades: string
   created_at: string
 }
+
+declare interface Headers {
+  uid: string
+  client: string
+  'access-token': string
+}

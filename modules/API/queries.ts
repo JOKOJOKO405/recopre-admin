@@ -20,7 +20,7 @@ interface TodoInput {
 interface ChildCreateInput {
   name: string
   grade: number
-  icon: string
+  icon: number
 }
 
 export const signUp = async (val: SignUp) => {
@@ -33,8 +33,8 @@ export const signIn = async (val: SignIn) => {
 export const getChildren = async (token: any) => {
   return await axios.get('/api/children', { headers: token })
 }
-export const createChild = async (data: ChildCreateInput) => {
-  return await axios.post('/api/children', data)
+export const createChild = async (token: any, data: ChildCreateInput) => {
+  return await axios.post('/api/children', data, { headers: token })
 }
 
 // todos
