@@ -5,7 +5,18 @@
         <h1 class="mb-4 text-h5 font-weight-bold">お子様を選択</h1>
         <div class="text-center">
           <template v-if="children.length">
-            {{ children }}
+            <div class="d-flex justify-center">
+              <div v-for="child in children" :key="child.id">
+                <div class="pa-3" @click="goToChildPage(child.id)">
+                  <img
+                    :src="
+                      require(`@/assets/images/icons/${avatarSrc(child.icon)}`)
+                    "
+                  />
+                </div>
+                <p class="text-center font-weight-bold">{{ child.name }}</p>
+              </div>
+            </div>
           </template>
           <template v-else>
             <h3 class="gray600--text mb-3">まだ登録がありません</h3>
@@ -75,7 +86,8 @@ import {
   reactive,
   useFetch,
   useStore,
-  useRoute
+  useRoute,
+  useRouter
 } from '@nuxtjs/composition-api'
 import {
   getChildren,
@@ -85,16 +97,19 @@ import {
   deleteTodos
 } from '@/modules/API/queries'
 import { filteredTodosTimezone } from '~/modules/filter'
+import { avatars } from '~/modules/cihldrenAvatars'
 
 export default defineComponent({
   layout: 'no-header',
   setup() {
     const store = useStore()
     const route = useRoute()
+    const router = useRouter()
     const userId = ref<number>(0)
 
     // FIXME: 型つくる
     const children = ref<any[]>([])
+    const avatar = ref<string>('')
     const commonTodos = ref<DivideTodos | null>()
     // FIXME CreateTodosDialogと同じなので切り出す
     const commonTodoInput = reactive({
@@ -107,6 +122,22 @@ export default defineComponent({
       kana: '',
       timezone: 'morning'
     })
+
+    /**
+     * 子供アバター
+     */
+    const avatarSrc = (id: any) => {
+      const icon = avatars.filter(avatar => {
+        return id === avatar.id
+      })
+      return icon[0].src
+    }
+    /**
+     * 子供ページ遷移
+     * */
+    const goToChildPage = (id: number) => {
+      router.push(`${userId.value}/${id}/home`)
+    }
 
     const isOpenedDialog = ref(false)
     const isOpenedDeleteDialog = ref(false)
@@ -178,6 +209,7 @@ export default defineComponent({
         getTodos()
       ])
       children.value = resChildren.data
+
       commonTodos.value = filteredTodosTimezone(resTodos.data)
       userId.value = parseInt(route.value.params.id)
     })
@@ -198,7 +230,10 @@ export default defineComponent({
       deleteTodo,
       openDialogForEdit,
       isEditable,
-      registTodos
+      registTodos,
+      avatar,
+      avatarSrc,
+      goToChildPage
     }
   }
 })
