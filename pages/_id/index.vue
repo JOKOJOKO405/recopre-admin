@@ -1,7 +1,7 @@
 <template>
   <div v-if="!$fetchState.pending" id="parent-id-page" class="pa-6">
     <div class="pa-6 white rounded-lg">
-      <div class="child_register mb-8">
+      <div class="child_register mb-10">
         <h1 class="mb-4 text-h5 font-weight-bold">お子様を選択</h1>
         <div class="text-center">
           <template v-if="children.length">
@@ -13,10 +13,14 @@
                       require(`@/assets/images/icons/${avatarSrc(child.icon)}`)
                     "
                   />
+                  <p class="text-center font-weight-bold">{{ child.name }}</p>
                 </div>
-                <p class="text-center font-weight-bold">{{ child.name }}</p>
               </div>
             </div>
+            <AppBtn
+              btn-text="お子様を追加"
+              @click="$router.push(`${userId}/register`)"
+            />
           </template>
           <template v-else>
             <h3 class="gray600--text mb-3">まだ登録がありません</h3>
