@@ -265,7 +265,8 @@ export default defineComponent({
       try {
         const headers = await store.getters['user/headers']
         // if (!headers) return
-        const childData = await createChild(child, headers)
+        console.debug('headers', headers)
+        const childData = await createChild(headers, child)
         console.debug('childData', childData)
         stepperEl.value = 2
       } catch (error) {}
