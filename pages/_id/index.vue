@@ -5,22 +5,35 @@
         <h1 class="mb-4 text-h5 font-weight-bold">お子様を選択</h1>
         <div class="text-center">
           <template v-if="children.length">
-            <div class="d-flex justify-center">
+            <div class="d-flex justify-center mb-3">
               <div v-for="child in children" :key="child.id">
-                <div class="pa-3" @click="goToChildPage(child.id)">
+                <div class="px-3 pt-3" @click="goToChildPage(child.id)">
                   <img
                     :src="
                       require(`@/assets/images/icons/${avatarSrc(child.icon)}`)
                     "
                   />
-                  <p class="text-center font-weight-bold">{{ child.name }}</p>
+                  <p class="text-center font-weight-bold ma-0">
+                    {{ child.name }}
+                  </p>
                 </div>
+                <v-btn
+                  text
+                  x-small
+                  color="accent"
+                  class="text-caption font-weight-bold"
+                  @click="goToEditPage(child.id)"
+                >
+                  編集
+                </v-btn>
               </div>
             </div>
-            <AppBtn
-              btn-text="お子様を追加"
-              @click="$router.push(`${userId}/register`)"
-            />
+            <div class="text-right">
+              <AppBtn
+                btn-text="お子様を追加"
+                @click="$router.push(`${userId}/register`)"
+              />
+            </div>
           </template>
           <template v-else>
             <h3 class="gray600--text mb-3">まだ登録がありません</h3>
@@ -112,7 +125,7 @@ export default defineComponent({
     const userId = ref<number>(0)
 
     // FIXME: 型つくる
-    const children = ref<any[]>([])
+    const children = ref<Child[]>([])
     const avatar = ref<string>('')
     const commonTodos = ref<DivideTodos | null>()
     // FIXME CreateTodosDialogと同じなので切り出す
@@ -141,6 +154,9 @@ export default defineComponent({
      * */
     const goToChildPage = (id: number) => {
       router.push(`${userId.value}/${id}/home`)
+    }
+    const goToEditPage = (id: number) => {
+      router.push(`${userId}/edit`)
     }
 
     const isOpenedDialog = ref(false)
@@ -237,7 +253,8 @@ export default defineComponent({
       registTodos,
       avatar,
       avatarSrc,
-      goToChildPage
+      goToChildPage,
+      goToEditPage
     }
   }
 })

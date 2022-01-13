@@ -13,6 +13,15 @@ declare interface Timer {
   sec: number
 }
 
+declare interface Child {
+  name: string
+  grade: number
+  icon: number
+  todos: Todos[] | null
+  items: any[] //TODO
+  created_at: string
+}
+
 declare type Timezone = 'morning' | 'afternoon' | 'evening'
 declare interface Todos {
   id: number

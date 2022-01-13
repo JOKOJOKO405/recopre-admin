@@ -33,6 +33,9 @@ export const signIn = async (val: SignIn) => {
 export const getChildren = async (token: any) => {
   return await axios.get('/api/children', { headers: token })
 }
+export const getChild = async (token: any, id: number) => {
+  return await axios.get(`/api/children/${id}`, { headers: token })
+}
 export const createChild = async (token: any, data: ChildCreateInput) => {
   return await axios.post(
     '/api/children',
